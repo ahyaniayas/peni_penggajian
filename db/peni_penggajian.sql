@@ -1,23 +1,25 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
--- http://www.phpmyadmin.net
+-- version 5.0.1
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 19 Feb 2018 pada 05.34
--- Versi Server: 5.6.21
--- PHP Version: 5.5.19
+-- Waktu pembuatan: 27 Apr 2020 pada 17.57
+-- Versi server: 10.4.11-MariaDB
+-- Versi PHP: 7.3.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `penggajian`
+-- Database: `peni_penggajian`
 --
 
 -- --------------------------------------------------------
@@ -26,23 +28,24 @@ SET time_zone = "+00:00";
 -- Struktur dari tabel `gaji`
 --
 
-CREATE TABLE IF NOT EXISTS `gaji` (
-`id_gaji` int(10) NOT NULL,
+CREATE TABLE `gaji` (
+  `id_gaji` int(10) NOT NULL,
   `tgl_gaji` date NOT NULL,
   `nip` varchar(10) NOT NULL,
   `gaji` double NOT NULL,
-  `tunjangan` double NOT NULL,
-  `potongan` int(11) NOT NULL,
-  `total_gaji` double NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+  `lembur` double NOT NULL,
+  `uang_makan` double NOT NULL,
+  `transport` double NOT NULL,
+  `bpjs` double NOT NULL,
+  `pph21` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `gaji`
 --
 
-INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `tunjangan`, `potongan`, `total_gaji`) VALUES
-(17, '2018-01-10', '1501091002', 1000000, 100000, 5000, 1095000),
-(18, '2018-03-22', '1501091010', 1000000, 50000, 10000, 1040000);
+INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `lembur`, `uang_makan`, `transport`, `bpjs`, `pph21`) VALUES
+(24, '2020-04-27', '1501091009', 2000000, 560000, 1500000, 750000, 41000, 200000);
 
 -- --------------------------------------------------------
 
@@ -50,23 +53,27 @@ INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `tunjangan`, `potongan
 -- Struktur dari tabel `pegawai`
 --
 
-CREATE TABLE IF NOT EXISTS `pegawai` (
+CREATE TABLE `pegawai` (
   `nip` varchar(10) NOT NULL,
   `nama` varchar(50) NOT NULL,
-  `sk` varchar(10) NOT NULL,
-  `nohp` varchar(12) NOT NULL,
   `alamat` text NOT NULL,
   `jabatan` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL
+  `nohp` varchar(12) NOT NULL,
+  `sk` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `pegawai`
 --
 
-INSERT INTO `pegawai` (`nip`, `nama`, `sk`, `nohp`, `alamat`, `jabatan`, `password`) VALUES
-('1501091002', 'Fara', 'S', '123', 'Padang Panjang', 'Programmer', 'fara'),
-('46546', 'fdfd', 'df', '34', 'dfdf', 'dfgg', 'qqq');
+INSERT INTO `pegawai` (`nip`, `nama`, `alamat`, `jabatan`, `nohp`, `sk`) VALUES
+('1501091001', 'Tasyaa', 'Jakarta', 'Manager Keuangan', '081222675643', ''),
+('1501091002', 'Fara', 'Padang Panjang', 'Programmer', '081288123344', 'S'),
+('1501091003', 'Rangga', 'Depok', 'Operator', '089976554388', ''),
+('1501091004', 'Iding', 'Padang Pendek', 'Operator Jet', '083811436677', 'df'),
+('1501091006', 'Ahyani', 'bekasi barat daya', 'Direktur', '08127778767', ''),
+('1501091008', 'Huri', 'Jakarta', 'Kepala Bagian', '089938737766', ''),
+('1501091009', 'Alexa', 'Jakarta', 'Operator', '081233564487', '');
 
 -- --------------------------------------------------------
 
@@ -74,8 +81,9 @@ INSERT INTO `pegawai` (`nip`, `nama`, `sk`, `nohp`, `alamat`, `jabatan`, `passwo
 -- Struktur dari tabel `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE `user` (
   `username` varchar(20) NOT NULL,
+  `nama` varchar(200) NOT NULL,
   `password` varchar(20) NOT NULL,
   `level` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -84,42 +92,43 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`username`, `password`, `level`) VALUES
-('1501091002', 'fara', 'pegawai'),
-('46546', 'qqq', 'pegawai'),
-('admin', 'admin', 'admin');
+INSERT INTO `user` (`username`, `nama`, `password`, `level`) VALUES
+('adminkeu', 'Nur Jaman', 'admin', 'keu'),
+('adminspv', 'Jayadi', 'admin', 'spv');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `gaji`
+-- Indeks untuk tabel `gaji`
 --
 ALTER TABLE `gaji`
- ADD PRIMARY KEY (`id_gaji`);
+  ADD PRIMARY KEY (`id_gaji`);
 
 --
--- Indexes for table `pegawai`
+-- Indeks untuk tabel `pegawai`
 --
 ALTER TABLE `pegawai`
- ADD PRIMARY KEY (`nip`);
+  ADD PRIMARY KEY (`nip`);
 
 --
--- Indexes for table `user`
+-- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
- ADD PRIMARY KEY (`username`);
+  ADD PRIMARY KEY (`username`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `gaji`
+-- AUTO_INCREMENT untuk tabel `gaji`
 --
 ALTER TABLE `gaji`
-MODIFY `id_gaji` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+  MODIFY `id_gaji` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
