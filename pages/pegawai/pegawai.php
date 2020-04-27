@@ -1,126 +1,142 @@
 <?php
-include ('koneksi.php');
-$page=isset($_GET['page']) ? $_GET['page'] : 'list';
+
+if($_SESSION['level']!="spv"){
+  header('location:index.php');
+}
+
+include_once '_part/koneksi.php';
+
+$page = isset($_GET['page']) ? $_GET['page'] : 'list';
 switch ($page) {
 case 'list':
 ?>
-<h1> Data Pegawai </h1>
-<a href="index.php?p=pegawai&page=entri" class="btn btn-success"><span class="glyphicon glyphicon-plus"> Tambah</span></a>
-<p>
-<table width="492" border="1" class="table table-striped">
+<h1>Data Pegawai</h1>
+<div class="row" style="margin: 20px auto;">
+  <a href="index.php?p=pegawai&page=entri" class="btn btn-success"><span class="glyphicon glyphicon-plus"> Tambah</span></a>
+</div>
+<table id="example" class="table table-striped table-bordered">
+  <thead>
     <tr>
-      <td width="21"><div align="center"><strong>NIK</strong></div></td>
-      <td width="105"><div align="center"><strong>Nama  </strong></div></td>
-      <td width="105"><div align="center"><strong>cabang</strong></div></td>
-      <td width="105"><div align="center"><strong>Jabatan</strong></div></td>
+      <th>NIP</th>
+      <th>Nama</th>
+      <th>Alamat</th>
+      <th>Jabatan</th>
+      <th>No. Hp</th>
+      <th>Aksi</th>
     </tr>
+  </thead>
+  <tbody>
 	<?php
-		$tampil=mysql_query("select * from pegawai ");
-		$no=1;
-		while($data=mysql_fetch_array($tampil))
-		{
+		$sql = "SELECT * FROM pegawai";
+    $row = $koneksi->prepare($sql);
+    $row->execute();
+    $hasil = $row->fetchAll(PDO::FETCH_OBJ);
+		
+    $no = 0;
+		foreach($hasil as $isi){
+  		$no++;
 	?>
     <tr>
-      <td><div align="center"><?php echo $data['NIK'];?></div></td>
-      <td><div align="center"><?php echo $data['nama'];?></div>
-      <td><div align="center"><?php echo $data['cabang'];?></div></td>
-      <td><div align="center"><?php echo $data['jabatan'];?></div></td>
-      <td><div align="left"><a href="pegawai/aksi_pegawai.php?proses=hapus&NIK=<?php echo $data['NIK']?>"><span class="glyphicon glyphicon-floppy-remove"> Hapus</span></a><br />
-	        <a href="index.php?p=pegawai&page=edit&NIK=<?php echo $data['NIK']?>"><span class="glyphicon glyphicon-edit"> Edit</span></a></div></td>
+      <td><?= $isi->nip;?></td>
+      <td><?= $isi->nama;?></td>
+      <td><?= $isi->alamat;?></td>
+      <td><?= $isi->jabatan;?></td>
+      <td><?= $isi->nohp;?></td>
+      <td align="center" style="width: 12%">
+          <a href="index.php?p=pegawai&page=edit&nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          <a href="pegawai/aksi_pegawai.php?nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
+        </td>
     </tr>
-	<?php
-		$no++;
-		}
-	?>
+	<?php } ?>
+  </tbody>
 </table>
 <?php
 break;
+
 case 'entri':
 ?>
-<h1> Form Pegawai </h1>
-<form id="form1" name="form1" method="post" action="pegawai/aksi_pegawai.php?proses=entri">
-  <table width="311" border="0">
-    <input type="hidden" name="level" value="pegawai" />
-    <tr>
-      <td width="94">NIK </td>
-      <td width="207"><label>
-        <input type="text" name="NIK" />
-      </label></td>
-    </tr>
-    <tr>
-      <td>Nama </td>
-      <td><label>
-        <input type="text" name="nama" />
-      </label></td>
-    </tr>
-    <tr>
-      <td>Cabang</td>
-      <td><label>
-        <input type="text" name="cabang" />
-      </label></td>
-    </tr>
-	<tr>
-      <td>Jabatan</td>
-      <td><label>
-        <input type="text" name="jabatan" />
-      </label></td>
-    </tr>
-    <tr>
-
-      <td>&nbsp;</td>
-      <td><label>
-        <button name="simpan" type="submit" id="simpan" value="Simpan" class="btn btn-primary">
-		<span class="glyphicon glyphicon-floppy-disk">Simpan</span>		</button>
-		
-      </label></td>
-    </tr>
-  </table>
-  <p><a href="index.php?p=pegawai">Tampilkan Tabel Pegawai </a>  </p>
+<h1>Form Pegawai</h1>
+<form id="form1" name="form1" method="post" action="pegawai/aksi_pegawai.php">
+  <div class="col-lg-4">
+    <div class="form-group">
+      <label>NIP</label>
+      <input type="number" class="form-control" name="nip" placeholder="Masukkan NIP" required="">
+    </div>
+    <div class="form-group">
+      <label>Nama</label>
+      <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama">
+    </div>
+    <div class="form-group">
+      <label>Alamat</label>
+      <textarea class="form-control" name="alamat" placeholder="Masukkan Alamat"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Jabatan</label>
+      <input type="text" class="form-control" name="jabatan" placeholder="Masukkan Jabatan">
+    </div>
+    <div class="form-group">
+      <label>No. Hp</label>
+      <input type="number" class="form-control" name="nohp" placeholder="Masukkan No. Hp">
+    </div>
+    <div class="form-group">
+      <button name="proses" type="submit" value="simpan" class="btn btn-primary">
+        <i class="glyphicon glyphicon-floppy-disk"></i>	Simpan
+      </button>
+    </div>
+    <div class="form-group">
+      <a href="index.php?p=pegawai">Tampilkan Tabel Pegawai</a>
+    </div>
+  </div>
 </form>
 <?php
 break;
-case 'edit':
-$tampil = mysql_query("select * from pegawai where NIK='$_GET[NIK]'");
-$data=mysql_fetch_array($tampil);
-?>
-<form id="form1" name="form1" method="post" action="pegawai/aksi_pegawai.php?proses=edit">
-  <table width="311" border="0">
-    <tr>
-      <td colspan="2"><div align="center"><strong>DATA PEGAWAI </strong></div></td>
-    </tr>
-    <tr>
-      <td width="94">NIK </td>
-      <td width="207"><label>
-        <input type="text" name="NIK" value = "<?php echo $data['NIK']?>" readonly/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>Nama </td>
-      <td><label>
-        <input type="text" name="nama" value = "<?php echo $data['nama']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>Cabang</td>
-      <td><label>
-        <input type="text" name="cabang" value = "<?php echo $data['cabang']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>Jabatan</td>
-      <td><label>
-        <input type="text" name="jabatan" value = "<?php echo $data['jabatan']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td><label>
-        <input name="simpan" type="submit" id="simpan" value="Simpan" class="btn btn-primary" />
-      </label></td>
-    </tr>
-  </table>
-</form>
 
+case 'edit':
+$nip = $_GET['nip'];
+$sql = "SELECT * FROM pegawai WHERE nip='$nip'";
+$row = $koneksi->prepare($sql);
+$row->execute();
+$isi = $row->fetch(PDO::FETCH_OBJ);
+
+$nama = $isi->nama;
+$alamat = $isi->alamat;
+$jabatan = $isi->jabatan;
+$nohp = $isi->nohp;
+?>
+<h1>Edit Pegawai</h1>
+<form id="form1" name="form1" method="post" action="pegawai/aksi_pegawai.php">
+  <div class="col-lg-4">
+    <div class="form-group">
+      <label>NIP</label>
+      <input type="number" class="form-control" name="nip" placeholder="Masukkan NIP" value="<?= $nip ?>" readonly="">
+    </div>
+    <div class="form-group">
+      <label>Nama</label>
+      <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama" value="<?= $nama ?>">
+    </div>
+    <div class="form-group">
+      <label>Alamat</label>
+      <textarea class="form-control" name="alamat" placeholder="Masukkan Alamat"><?= $alamat ?></textarea>
+    </div>
+    <div class="form-group">
+      <label>Jabatan</label>
+      <input type="text" class="form-control" name="jabatan" placeholder="Masukkan Jabatan" value="<?= $jabatan ?>">
+    </div>
+    <div class="form-group">
+      <label>No. Hp</label>
+      <input type="number" class="form-control" name="nohp" placeholder="Masukkan No. Hp" value="<?= $nohp ?>">
+    </div>
+    <div class="form-group">
+      <button name="proses" type="submit" value="edit" class="btn btn-primary">
+        <i class="glyphicon glyphicon-floppy-disk"></i> Simpan
+      </button>
+    </div>
+    <div class="form-group">
+      <a href="index.php?p=pegawai">Tampilkan Tabel Pegawai</a>
+    </div>
+  </div>
+</form>
 <?php
 break;
 }

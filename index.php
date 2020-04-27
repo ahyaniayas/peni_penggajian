@@ -1,20 +1,19 @@
 <?php 
     session_start();
     if(empty($_SESSION['username']) AND empty($_SESSION['password'])){
-        require_once "pages/koneksi.php";
+        require_once "pages/_part/koneksi.php";
     }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title> LOGIN </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PT ESSEI PERBAMA</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/sb-admin.css" rel="stylesheet">
 </head>
-<body background="bg.jpg">
+<body>
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">

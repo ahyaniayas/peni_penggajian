@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'koneksi.php';
+include '_part/koneksi.php';
 
 $username=$_POST['username'];
 $password=$_POST['password'];
@@ -18,15 +18,14 @@ if($jml > 0){
     // Jika Berhasil
     $isi = $row->fetch(PDO::FETCH_OBJ);      
     $_SESSION['username']=$isi->username;
+    $_SESSION['nama']=$isi->nama;
     $_SESSION['password']=$isi->password;
     $_SESSION['level']=$isi->level;
 
-    echo "<script>
-    location='index.php?username=".$username."';</script>";
+    echo "<script>location='index.php';</script>";
 }else{
     // Jika Gagal
-    echo "<script> alert ('username atau password salah');
-    location='../index.php';</script>";
+    echo "<script>alert ('username atau password salah'); location='../index.php';</script>";
 }
 
 ?>

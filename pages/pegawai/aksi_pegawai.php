@@ -1,41 +1,49 @@
 <?php
 
-include ('../koneksi.php');
-if ($_GET['proses']=='entri')
-{
-$NIK=$_POST['NIK'];
-$nama=$_POST['nama'];
-$cabang=$_POST['cabang'];
-$jabatan=$_POST['jabatan'];
+if($_SESSION['level']!="spv"){
+  header('location:../index.php');
+}
 
-$simpan=mysql_query("insert into pegawai(NIK,nama,cabang,jabatan) values ('$NIK','$nama','$cabang','$jabatan')");
+include ('../_part/koneksi.php');
+$proses = empty($_POST['proses'])? "": $_POST['proses']; 
+if($proses=='simpan'){
 
-$save=mysql_query("insert into user(username,password,level) values ('$NIK','$password','$level')");
-	if($simpan)
-	{
-		echo "<script>top.location='../index.php?p=pegawai'</script>";
-		}
+	$nip=$_POST['nip'];
+	$nama=$_POST['nama'];
+	$alamat=$_POST['alamat'];
+	$jabatan=$_POST['jabatan'];
+	$nohp=$_POST['nohp'];
+
+	$sql = "INSERT INTO pegawai(nip, nama, alamat, jabatan, nohp) values ('$nip', '$nama', '$alamat', '$jabatan', '$nohp')";
+	$row = $koneksi->prepare($sql);
+	$row->execute();
+	echo "<script>alert('Tambah Berhasil'); location='../index.php?p=pegawai&page=entri'</script>";
+
+}else if($proses=='edit'){
+	$nip=$_POST['nip'];
+	$nama=$_POST['nama'];
+	$alamat=$_POST['alamat'];
+	$jabatan=$_POST['jabatan'];
+	$nohp=$_POST['nohp'];
+
+	$sql = "UPDATE pegawai SET 
+			nama='$nama',
+			alamat='$alamat',
+			jabatan='$jabatan',
+			nohp='$nohp'
+			where nip='$nip'";
+	$row = $koneksi->prepare($sql);
+	$row->execute();
+	echo "<script>alert('Edit Berhasil'); location='../index.php?p=pegawai&page=edit&nip=$nip'</script>";
 
 }
-if ($_GET['proses']=='edit')
-{
-$update=mysql_query("update pegawai set nama='$_POST[nama]',
-												  cabang='$_POST[cabang]',
-												  jabatan='$_POST[jabatan]',
-												  where NIK='$_POST[NIK]'");
-		if($update)
-		{
-			header("location:../index.php?p=pegawai");
-		}
 
-}
-if($_GET['proses']=='hapus')
-{
-	$hapus=mysql_query("delete from pegawai where NIK = '$_GET[NIK]'");
-	if($hapus)
-	{
-		header("location:../index.php?p=pegawai");
-	}
+if(isset($_GET['nip'])){
+	$nip = $_GET['nip'];
+	$sql = "DELETE FROM pegawai where nip = '$nip'";
+	$row = $koneksi->prepare($sql);
+	$row->execute();
+	echo "<script>alert('Hapus Berhasil'); location='../index.php?p=pegawai'</script>";
 
 }
 ?>
