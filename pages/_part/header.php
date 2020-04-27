@@ -29,7 +29,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Penggajian</a>
+                <a class="navbar-brand" href="index.php">Penggajian</a>
             </div>
             <!-- /.navbar-header -->
 

@@ -1,7 +1,7 @@
 <?php
-
+session_start();
 if($_SESSION['level']!="spv"){
-  header('location:../index.php');
+  echo "<script>location='../index.php'</script>";
 }
 
 include ('../_part/koneksi.php');

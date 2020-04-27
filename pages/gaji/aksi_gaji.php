@@ -1,62 +1,57 @@
- <?php
-include ('../koneksi.php');
-
-/* PROSES ENTRI DATA GAJI */
-
-if ($_GET['proses']=='entri')
-	{
-		$cari=mysql_query("select * from gaji where nip='$_POST[nip]' and tgl_gaji='$_POST[tgl_gaji]' ");
-		$ca=mysql_num_rows($cari);
-	
-if(empty($ca))
-	{
-
-		$tgl_gaji=$_POST['tgl_gaji'];
-		$nip=$_POST['nip'];
-		$gaji=$_POST['gaji_pokok'];
-		$tunjangan=$_POST['tunjangan'];
-		$potongan=$_POST['potongan'];
-		$total_gaji=($gaji+$tunjangan)-$potongan;
-
-$simpan=mysql_query("insert into gaji(tgl_gaji,nip,gaji_pokok,tunjangan,potongan,total_gaji) values ('$tgl_gaji','$nip','$gaji_pokok','$tunjangan','$potongan','$total_gaji')");
-	if($simpan)
-		{
-			echo "<script>top.location='../index.php?p=gaji'</script>";
-		}
-	}
-	elseif(!empty($ca)) 
-		{
-			echo "<script>alert('Data Sudah Ada')</script>";
-			echo "<script>top.location='../index.php?p=gaji'</script>";
-		}
-	}
-
-/* PROSES EDIT DATA GAJI */
-if ($_GET['proses']=='edit')
-{
-$update=mysql_query("update gaji set tgl_gaji='$_POST[tgl_gaji]',
-												  nip='$_POST[nip]',
-												  gaji_pokok='$_POST[gaji_pokok]',
-												  tunjangan='$_POST[tunjangan]',
-												  potongan='$_POST[potongan]',
-												  total_gaji='$_POST[total_gaji]'
-												  where id_gaji='$_POST[id_gaji]'");
-		if($update)
-		{
-			header("location:../index.php?p=gaji");
-		}
+<?php
+session_start();
+if($_SESSION['level']!="spv"){
+  echo "<script>location='../index.php'</script>";
 }
 
+include ('../_part/koneksi.php');
+$proses = empty($_POST['proses'])? "": $_POST['proses']; 
+if($proses=='simpan'){
 
-/* PROSES HAPUS DATA GAJI */
-if($_GET['proses']=='hapus')
-{
-	$hapus=mysql_query("DELETE from gaji where id_gaji='$_GET[id_gaji]'");
-	if($hapus)
-	{
-		header("location:../index.php?p=gaji");
-	}
+	$nip=$_POST['nip'];
+	$gaji=$_POST['gaji'];
+	$lembur=$_POST['lembur'];
+	$uang_makan=$_POST['uang_makan'];
+	$transport=$_POST['transport'];
+	$bpjs=$_POST['bpjs'];
+	$pph21=$_POST['pph21'];
+
+	$sql = "INSERT INTO gaji(tgl_gaji, nip, gaji, lembur, uang_makan, transport, bpjs, pph21) values (NOW(), '$nip', '$gaji', '$lembur', '$uang_makan', '$transport', '$bpjs', '$pph21')";
+	$row = $koneksi->prepare($sql);
+	$row->execute();
+	echo "<script>alert('Tambah Berhasil'); location='../index.php?p=gaji&page=entri'</script>";
+
+}else if($proses=='edit'){
+
+	$id_gaji=$_POST['id_gaji'];
+
+	$gaji=$_POST['gaji'];
+	$lembur=$_POST['lembur'];
+	$uang_makan=$_POST['uang_makan'];
+	$transport=$_POST['transport'];
+	$bpjs=$_POST['bpjs'];
+	$pph21=$_POST['pph21'];
+
+	$sql = "UPDATE gaji SET 
+			gaji='$gaji',
+			lembur='$lembur',
+			uang_makan='$uang_makan',
+			transport='$transport',
+			bpjs='$bpjs',
+			pph21='$pph21'
+			where id_gaji='$id_gaji'";
+	$row = $koneksi->prepare($sql);
+	$row->execute();
+	echo "<script>alert('Edit Berhasil'); location='../index.php?p=gaji&page=edit&id=$id_gaji'</script>";
 
 }
 
+if(isset($_GET['id'])){
+	$id_gaji = $_GET['id'];
+	$sql = "DELETE FROM gaji where id_gaji = '$id_gaji'";
+	$row = $koneksi->prepare($sql);
+	$row->execute();
+	echo "<script>alert('Hapus Berhasil'); location='../index.php?p=gaji'</script>";
+
+}
 ?>

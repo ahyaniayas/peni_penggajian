@@ -1,7 +1,7 @@
 <?php
 
 if($_SESSION['level']!="spv"){
-  header('location:index.php');
+  echo "<script>location='index.php'</script>";
 }
 
 include_once '_part/koneksi.php';
@@ -32,9 +32,7 @@ case 'list':
     $row->execute();
     $hasil = $row->fetchAll(PDO::FETCH_OBJ);
 		
-    $no = 0;
 		foreach($hasil as $isi){
-  		$no++;
 	?>
     <tr>
       <td><?= $isi->nip;?></td>
@@ -45,7 +43,7 @@ case 'list':
       <td align="center">
           <a href="index.php?p=pegawai&page=edit&nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
           &nbsp;&nbsp;|&nbsp;&nbsp;
-          <a href="pegawai/aksi_pegawai.php?nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
+          <a href="pegawai/aksi_pegawai.php?nip=<?= $isi->nip ?>" onclick="return confirm('Yakin Hapus ?')"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
         </td>
     </tr>
 	<?php } ?>

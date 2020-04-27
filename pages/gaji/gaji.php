@@ -1,382 +1,217 @@
 <?php
-include ('koneksi.php');
-$page=isset($_GET['page']) ? $_GET['page'] : 'list';
+
+if($_SESSION['level']!="spv"){
+  echo "<script>location='index.php'</script>";
+}
+include_once '_part/koneksi.php';
+
+$page = isset($_GET['page']) ? $_GET['page'] : 'list';
 switch ($page) {
 case 'list':
 ?>
-<h1> Data Gaji </h1>
-<a href="index.php?p=gaji&page=entri" class="btn btn-success"><span class="glyphicon glyphicon-plus"> Tambah</span></a>
-<a href="index.php?p=gaji&page=cari" class="btn btn-success"><span class="glyphicon glyphicon-download-alt" target="_blank"> Slip Gaji</span></a>
-<p>
-<table width="492" border="1" class="table table-striped">
+<h1>Data Gaji</h1>
+<div class="row" style="margin: 20px auto;">
+  <a href="index.php?p=gaji&page=entri" class="btn btn-success"><span class="glyphicon glyphicon-plus"> Tambah</span></a>
+</div>
+<table id="example" class="table table-striped table-bordered">
+  <thead>
     <tr>
-      <td width="21"><div align="center"><strong>NIK</strong></div></td>
-      <td width="105"><div align="center"><strong>Nama</strong></div></td>
-      <td width="120"><div align="center"><strong>Gaji Pokok </strong></div></td>
-	  <td width="120"><div align="center"><strong>Lembur </strong></div></td>
-      <td width="105"><div align="center"><strong>Uang Makan</strong></div></td>
-	  <td width="105"><div align="center"><strong>Transport</strong></div></td>
-      <td width="105"><div align="center"><strong>BPJS</strong></div></td>
-      <td width="105"><div align="center"><strong>PPh 21</strong></div></td>
-      <td width="105"><div align="center"><strong>Pinjaman</strong></div></td>
-      <td width="107"><div align="center"><strong>Total Gaji</strong></div></td>
+      <th>Tanggal</th>
+      <th>NIP</th>
+      <th>Nama</th>
+      <th>Gaji Pokok</th>
+      <th>Lembur</th>
+      <th>Uang Makan</th>
+      <th>Transport</th>
+      <th>BPJS</th>
+      <th>PPH 21</th>
+      <th>Total Gaji</th>
+      <th>Aksi</th>
     </tr>
-	<?php
-		$tampil=mysql_query("select * from gaji");
-		$no=1;
-		while($data=mysql_fetch_array($tampil))
-		{
-	?>
+  </thead>
+  <tbody>
+  <?php
+    $sql = "SELECT a.*, b.nip, b.nama FROM gaji a JOIN pegawai b ON a.nip=b.nip";
+    $row = $koneksi->prepare($sql);
+    $row->execute();
+    $hasil = $row->fetchAll(PDO::FETCH_OBJ);
+    
+    foreach($hasil as $isi){
+  ?>
     <tr>
-      <td><div align="center"><?php echo $data['NIK'];?></div></td>
-      <td><div align="left"><?php echo $data['nama'];?></div>
-      <td><div align="center"><?php echo $data['gaji_pokok'];?></div></td>
-      <td><div align="center"><?php echo $data['lembur'];?></div></td>
-      <td><div align="center"><?php echo $data['Uang_Makan'];?></div></td>
-	  <td><div align="center"><?php echo $data['Transport'];?></div></td>
-      <td><div align="center"><?php echo $data['BPJS'];?></div></td>
-	  <td><div align="center"><?php echo $data['pph_21'];?></div></td>
-	  <td><div align="center"><?php echo $data['pinjaman'];?></div></td>
-      <td><div align="center"><?php echo $data['Total_Gaji'];?></div></td>
-      <td><div align="left"><a href="gaji/aksi_gaji.php?proses=hapus&NIK=<?php echo $data['NIK']?>"><span class="glyphicon glyphicon-floppy-remove"> Hapus</span></a><br />
-	        <a href="index.php?p=gaji&page=edit&NIK=<?php echo $data['NIK']?>"><span class="glyphicon glyphicon-edit"> Edit</span></a></div></td>
+      <td>
+        <span style="display: none;"><?= date("Ymd", strtotime($isi->tgl_gaji)) ?>?></span>
+        <?= date("d-m-Y", strtotime($isi->tgl_gaji));?>
+      </td>
+      <td><?= $isi->nip;?></td>
+      <td><?= $isi->nama;?></td>
+      <td><?= number_format($isi->gaji);?></td>
+      <td><?= number_format($isi->lembur);?></td>
+      <td><?= number_format($isi->uang_makan);?></td>
+      <td><?= number_format($isi->transport);?></td>
+      <td><?= number_format($isi->bpjs);?></td>
+      <td><?= number_format($isi->pph21);?></td>
+      <td>
+        <?php 
+        $total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->bpjs + $isi->pph21);
+        echo number_format($total);
+        ?>
+      </td>
+      <td align="center">
+          <a href="index.php?p=gaji&page=edit&id=<?= $isi->id_gaji ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          <a href="gaji/aksi_gaji.php?id=<?= $isi->id_gaji ?>" onclick="return confirm('Yakin Hapus ?')"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
+        </td>
     </tr>
-	<?php
-		$no++;
-		}
-	?>
+  <?php } ?>
+  </tbody>
 </table>
 <?php
 break;
+
 case 'entri':
 ?>
-
-<h1> Form Gaji </h1>
-<form id="form1" name="form1" method="post" action="gaji/aksi_gaji.php?proses=entri">
-  <table width="311" border="0">
-    
-    
-      <td>NIK</td>
-      <td><label>
-        <select class="form-control" name="NIK">
-                      <option value="<?php echo $data['NIK']; ?>"></option> 
-                      <?php
-                        $query=mysql_query("select NIK from pegawai");
-                            while ($data=mysql_fetch_array($query)) {
-                              echo "<option value=".$data['NIK'].">".$data['NIK']."</option>";
-                        }
-
-                      ?>
-                   </select>
-      </label></td>
-    </tr>
-	<tr>
-	<td>Nama</td>
-      <td><label>
-        <input type="text" name="nama" />
-      </label></td>
-    </tr>
-	<tr>
-      <td>Gaji Pokok</td>
-      <td><label>
-        <input type="text" name="gaji_pokok" />
-      </label></td>
-    </tr>
-	<tr>
-      <td>Lembur</td>
-      <td><label>
-        <input type="text" name="lembur" />
-      </label></td>
-    </tr>
-	<tr>
-      <td>Uang Makan</td>
-      <td><label>
-        <input type="text" name="Uang_Makan" />
-      </label></td>
-    </tr>
-	<tr>
-      <td>Transport</td>
-      <td><label>
-        <input type="text" name="Transport" />
-      </label></td>
-    </tr>
-	<tr>
-      <td>BPJS</td>
-      <td><label>
-        <input type="text" name="BPJS" />
-      </label></td>
-    </tr>
-	<tr>
-	  <td>PPh 21</td>
-      <td><label>
-        <input type="text" name="pph_21" />
-      </label></td>
-    </tr>
-	<tr>
-	  <td>Pinjaman</td>
-      <td><label>
-        <input type="text" name="pinjaman" />
-      </label></td>
-    </tr>
-      <td>Total Gaji</td>
-      <td><label>
-        <input type="text" name="Total_Gaji" />
-      </label></td>
-    </tr>
-	
-	
-    <tr>
-      <td>&nbsp;</td>
-      <td><label>
-        <button name="simpan" type="submit" id="simpan" value="Simpan" class="btn btn-primary">
-		    <span class="glyphicon glyphicon-floppy-disk">Simpan</span></button>
-		
-      </label></td>
-    </tr>
-  </table>
-  <p><a href="index.php?p=gaji">Tampilkan Tabel Gaji </a>  </p>
+<h1>Form Gaji</h1>
+<form id="form1" name="form1" method="post" action="gaji/aksi_gaji.php">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <label>Pilih Pegawai</label>
+        <select class="form-control" name="nip" required="">
+          <option value="">--- Pilih Pegawai ---</option>
+          <?php
+            $sqlPegawai = "SELECT * FROM pegawai ORDER BY nama ASC";
+            $rowPegawai = $koneksi->prepare($sqlPegawai);
+            $rowPegawai->execute();
+            $hasilPegawai = $rowPegawai->fetchAll(PDO::FETCH_OBJ);
+            
+            foreach($hasilPegawai as $isiPegawai){
+          ?>
+          <option value="<?= $isiPegawai->nip ?>"><?= $isiPegawai->nip." - ".$isiPegawai->nama ?></option>
+          <?php } ?>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Gaji Pokok</label>
+        <input type="number" class="form-control" name="gaji" placeholder="Masukkan Gaji Pokok">
+      </div>
+      <div class="form-group">
+        <label>Lembur</label>
+        <input type="number" class="form-control" name="lembur" placeholder="Masukkan Lembur">
+      </div>
+      <div class="form-group">
+        <label>Uang Makan</label>
+        <input type="number" class="form-control" name="uang_makan" placeholder="Masukkan Uang Makan">
+      </div>
+      <div class="form-group">
+        <label>Transport</label>
+        <input type="number" class="form-control" name="transport" placeholder="Masukkan Transport">
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="form-group">
+        <label>BPJS</label>
+        <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS">
+      </div>
+      <div class="form-group">
+        <label>PPH 21</label>
+        <input type="number" class="form-control" name="pph21" placeholder="Masukkan PPH 21">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <button name="proses" type="submit" value="simpan" class="btn btn-primary">
+          <i class="glyphicon glyphicon-floppy-disk"></i> Simpan
+        </button>
+      </div>
+      <div class="form-group">
+        <a href="index.php?p=gaji">Tampilkan Tabel Gaji</a>
+      </div>
+    </div>
+  </div>
 </form>
 <?php
 break;
+
 case 'edit':
-$tampil = mysql_query("select * from gaji where NIK='$_GET[NIK]'");
-$data=mysql_fetch_array($tampil);
+$id_gaji = $_GET['id'];
+$sql = "SELECT * FROM gaji WHERE id_gaji='$id_gaji'";
+$row = $koneksi->prepare($sql);
+$row->execute();
+$isi = $row->fetch(PDO::FETCH_OBJ);
+
+$nip = $isi->nip;
+$gaji = $isi->gaji;
+$lembur = $isi->lembur;
+$uang_makan = $isi->uang_makan;
+$transport = $isi->transport;
+$bpjs = $isi->bpjs;
+$pph21 = $isi->pph21;
 ?>
-<form id="form1" name="form1" method="post" action="gaji/aksi_gaji.php?proses=edit">
-  <table width="311" border="0">
-    <tr>
-      <td colspan="2"><div align="center"><strong>DATA GAJI </strong></div></td>
-    </tr>
-    <tr>
-      <td width="94">NIK </td>
-      <td width="207"><label>
-        <input type="text" name="NIK" value = "<?php echo $data['NIK']?>" readonly/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>Nama</td>
-      <td><label>
-        <input type="text" name="nama" value = "<?php echo $data['nama']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>Gaji Pokok</td>
-      <td><label>
-        <input type="text" name="gaji_pokok" value = "<?php echo $data['gaji_pokok']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-	  <td>Lembur</td>
-      <td><label>
-        <input type="text" name="lembur" value = "<?php echo $data['lembur']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>Gaji Pokok</td>
-      <td><label>
-        <input type="text" name="gaji_pokok" value = "<?php echo $data['gaji_pokok']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>Uang Makan</td>
-      <td><label>
-        <input type="text" name="Uang_Makan" value = "<?php echo $data['Uang_Makan']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>Transport</td>
-      <td><label>
-        <input type="text" name="Transport" value = "<?php echo $data['Transport']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-	 <td>BPJS</td>
-      <td><label>
-        <input type="text" name="BPJS" value = "<?php echo $data['BPJS']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-	 <td>PPh 21</td>
-      <td><label>
-        <input type="text" name="pph_21" value = "<?php echo $data['pph_21']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-	  <td>Pinjaman</td>
-      <td><label>
-        <input type="text" name="pinjaman" value = "<?php echo $data['pinjaman']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>Total Gaji</td>
-      <td><label>
-        <input type="text" name="total_gaji" value = "<?php echo $data['total_gaji']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>&nbsp;</td>
-      <td><label>
-        <input name="simpan" type="submit" id="simpan" value="Simpan" class="btn btn-primary" />
-      </label></td>
-    </tr>
-  </table>
+<h1>Edit Gaji</h1>
+<form id="form1" name="form1" method="post" action="gaji/aksi_gaji.php">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <label>Pilih Pegawai</label>
+        <select class="form-control" name="nip" disabled="">
+          <option value="">--- Pilih Pegawai ---</option>
+          <?php
+            $sqlPegawai = "SELECT * FROM pegawai ORDER BY nama ASC";
+            $rowPegawai = $koneksi->prepare($sqlPegawai);
+            $rowPegawai->execute();
+            $hasilPegawai = $rowPegawai->fetchAll(PDO::FETCH_OBJ);
+            
+            foreach($hasilPegawai as $isiPegawai){
+          ?>
+          <option value="<?= $isiPegawai->nip ?>" <?= ($nip==$isiPegawai->nip)? "selected": ""; ?>><?= $isiPegawai->nip." - ".$isiPegawai->nama ?></option>
+          <?php } ?>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Gaji Pokok</label>
+        <input type="number" class="form-control" name="gaji" placeholder="Masukkan Gaji Pokok" value="<?= $gaji ?>">
+      </div>
+      <div class="form-group">
+        <label>Lembur</label>
+        <input type="number" class="form-control" name="lembur" placeholder="Masukkan Lembur" value="<?= $lembur ?>">
+      </div>
+      <div class="form-group">
+        <label>Uang Makan</label>
+        <input type="number" class="form-control" name="uang_makan" placeholder="Masukkan Uang Makan" value="<?= $uang_makan ?>">
+      </div>
+      <div class="form-group">
+        <label>Transport</label>
+        <input type="number" class="form-control" name="transport" placeholder="Masukkan Transport" value="<?= $transport ?>">
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="form-group">
+        <label>BPJS</label>
+        <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS" value="<?= $bpjs ?>">
+      </div>
+      <div class="form-group">
+        <label>PPH 21</label>
+        <input type="number" class="form-control" name="pph21" placeholder="Masukkan PPH 21" value="<?= $pph21 ?>">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <input type="hidden" name="id_gaji" value="<?= $id_gaji ?>">
+        <button name="proses" type="submit" value="edit" class="btn btn-primary">
+          <i class="glyphicon glyphicon-floppy-disk"></i> Simpan
+        </button>
+      </div>
+      <div class="form-group">
+        <a href="index.php?p=gaji">Tampilkan Tabel Gaji</a>
+      </div>
+    </div>
+  </div>
 </form>
-
-
-<?php
-break;
-  case 'cari':
-  ob_start();
-  $cari = mysql_query("SELECT * FROM gaji where month(tgl_gaji)='$_POST[bulan]'");
-  $data=mysql_fetch_array($cari); 
-?>
-
-<h1> Laporan Gaji Pegawai </h1>
-<form id="form1" name="form1" method="post" action="">
-<tr>
-      <td width="94">Bulan</td>
-      <select name="bulan">
-        <option value="01">Januari</option>
-        <option value="02">Februari</option>
-        <option value="03">Maret</option>
-        <option value="04">April</option>
-        <option value="05">Mei</option>
-        <option value="06">Juni</option>
-        <option value="07">Juli</option>
-        <option value="08">Agustus</option>
-        <option value="09">September</option>
-        <option value="10">Oktober</option>
-        <option value="11">November</option>
-        <option value="12">Desember</option>
-      </select>
-
-      <select name="tahun">
-        <?php
-            $mulai= date('Y') - 10;
-            for($i = $mulai;$i<$mulai + 20;$i++){
-                $sel = $i == date('Y') ? ' selected="selected"' : '';
-                echo '<option value="'.$i.'"'.$sel.'>'.$i.'</option>';
-            }
-            ?>
-      </select>
-
-
-    </tr>
-<tr>
-      <td>&nbsp;</td>
-      <td><label>
-        <button name="cari" type="submit" id="submit" value="submit" class="btn btn-primary">
-    <span class="glyphicon glyphicon-find">Cari</span></button>
-</label></td></tr>  
-</form>
-
- <table width="492" border="1" class="table table-striped">
-    <tr>
-      <td width="21"><div align="center"><strong>NIK</strong></div></td>
-      <td width="105"><div align="center"><strong>Nama  </strong></div></td>
-      <td width="120"><div align="center"><strong>Gaji Pokok</strong></div></td>
-	  <td width="120"><div align="center"><strong>Lembur </strong></div></td>
-      <td width="105"><div align="center"><strong>Uang Makan</strong></div></td>
-      <td width="105"><div align="center"><strong>Transport</strong></div></td>
-      <td width="105"><div align="center"><strong>BPJS</strong></div></td>
-      <td width="105"><div align="center"><strong>PPh 21</strong></div></td>
-      <td width="107"><div align="center"><strong>Pinjaman</strong></div></td>
-	  <td width="105"><div align="center"><strong>Total Gaji</strong></div></td>
-    </tr>
-  <?php
-    $gji = mysql_query("select * from gaji,pegawai where month(tgl_gaji)='$_POST[bulan]' and year(tgl_gaji) = '$_POST[tahun]' and gaji.nip=pegawai.nip");
-    $no=1;
-    while($data=mysql_fetch_array($gji))
-    {
-  ?>
-    <tr>
-      <td><div align="center"><?php echo $data['NIK'];?></div></td>
-      <td><div align="left"><?php echo $data['nama'];?></div>
-      <td><div align="center"><?php echo $data['gaji_pokok'];?></div></td>
-      <td><div align="center"><?php echo $data['lembur'];?></div></td>
-      <td><div align="center"><?php echo $data['Uang_Makan'];?></div></td>
-      <td><div align="center"><?php echo $data['Transport'];?></div></td>
-      <td><div align="center"><?php echo $data['BPJS'];?></div></td>
-	  <td><div align="center"><?php echo $data['pph_21'];?></div></td>
-	  <td><div align="center"><?php echo $data['pinjaman'];?></div></td>
-      <td><div align="center"><?php echo $data['Total_Gaji'];?></div></td>
-      <td><div align="left"><a href="index.php?p=gaji&page=cetak&NIK=<?php echo $data['NIK']?>"><span class="glyphicon glyphicon-print"> Cetak</span></a><br />        
-    </tr>
-    </tr>
-  <?php
-    $no++;
-    }
-  ?>
-</table>
-
-<?php
-break;
-case 'cetak':
-$tampil = mysql_query("SELECT * from gaji,pegawai where NIK='$_GET[NIK]' and gaji.nip=pegawai.nip");
-$data=mysql_fetch_array($tampil);
-?>
-<h4> <B>SLIP GAJI </B></h4>
-  <table width="311" border="0">
-    
-    <tr>
-      <td width="150">Id Gaji</td>
-      <td width="150"> : </td>
-      <td width="160"><?php echo $data['NIK']?> </td>
-      <td width="207"><label>
-        </label></td>
-    </tr>
-    <tr>
-      <td width="150">Tanggal Gaji </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['tgl_gaji']?> </td>
-      <td width="207"><label>
-    </tr>
-    <tr>
-      <td width="150">NIP </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['nip']?> </td>
-      <td width="207"><label>
-    </tr>
-    <tr>
-      <td width="150">Nama </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['Nama']?> </td>
-      <td width="207"><label>
-    </tr>
-    <td width="150">Gaji Pokok </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['gaji_pokok']?> </td>
-      <td width="207"><label>
-    </tr>
-  <tr>
-      <td width="150">Lembur </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['Lembur']?> </td>
-      <td width="207"><label>
-  <tr>
-      <td width="150">Uang Makan</td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['Uang_Makan']?> </td>
-      <td width="207"><label>
-    </tr>
-  <tr>
-      <td width="150">Transport </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['Transport']?> </td>
-      <td width="207"><label>
-  <tr>
-      <td width="150">BPJS </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['BPJS']?> </td>
-      <td width="207"><label>
-    <tr>
-      <td width="150">Total Gaji </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['total_gaji']?> </td>
-      <td width="207"><label>
-  </table>
-
-
 <?php
 break;
 }
