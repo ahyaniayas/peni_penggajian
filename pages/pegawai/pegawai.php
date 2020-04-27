@@ -42,7 +42,7 @@ case 'list':
       <td><?= $isi->alamat;?></td>
       <td><?= $isi->jabatan;?></td>
       <td><?= $isi->nohp;?></td>
-      <td align="center" style="width: 12%">
+      <td align="center">
           <a href="index.php?p=pegawai&page=edit&nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
           &nbsp;&nbsp;|&nbsp;&nbsp;
           <a href="pegawai/aksi_pegawai.php?nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
