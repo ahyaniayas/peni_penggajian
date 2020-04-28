@@ -4,34 +4,41 @@ if($_SESSION['level']!="spv"){
   echo "<script>location='index.php'</script>";
 }
 include_once '_part/koneksi.php';
-
+$p = $_GET['p'];
 $page = isset($_GET['page']) ? $_GET['page'] : 'list';
 switch ($page) {
 case 'list':
 ?>
-<h1>Data Gaji</h1>
+<h1><?= $p=="gaji"? "Data Gaji": "Cetak Slip Gaji" ?></h1>
 <div class="row" style="margin: 20px auto;">
+  <?php if($p=="gaji"){ ?>
   <a href="index.php?p=gaji&page=entri" class="btn btn-success"><span class="glyphicon glyphicon-plus"> Tambah</span></a>
+  <?php } ?>
 </div>
 <table id="example" class="table table-striped table-bordered">
   <thead>
     <tr>
       <th>Tanggal</th>
-      <th>NIP</th>
+      <th>Perusahaan</th>
+      <th>NIK</th>
       <th>Nama</th>
+      <?php if($p=="gaji"){ ?>
       <th>Gaji Pokok</th>
       <th>Lembur</th>
       <th>Uang Makan</th>
       <th>Transport</th>
       <th>BPJS</th>
       <th>PPH 21</th>
+      <?php } ?>
       <th>Total Gaji</th>
       <th>Aksi</th>
     </tr>
   </thead>
   <tbody>
   <?php
-    $sql = "SELECT a.*, b.nip, b.nama FROM gaji a JOIN pegawai b ON a.nip=b.nip";
+    $sql = "SELECT a.*, b.nama, c.nama nama_perusahaan FROM gaji a 
+            JOIN pegawai b ON a.nip=b.nip
+            JOIN perusahaan c ON b.id_perusahaan=c.id_perusahaan";
     $row = $koneksi->prepare($sql);
     $row->execute();
     $hasil = $row->fetchAll(PDO::FETCH_OBJ);
@@ -43,14 +50,17 @@ case 'list':
         <span style="display: none;"><?= date("Ymd", strtotime($isi->tgl_gaji)) ?>?></span>
         <?= date("d-m-Y", strtotime($isi->tgl_gaji));?>
       </td>
+      <td><?= $isi->nama_perusahaan;?></td>
       <td><?= $isi->nip;?></td>
       <td><?= $isi->nama;?></td>
+      <?php if($p=="gaji"){ ?>
       <td><?= number_format($isi->gaji);?></td>
       <td><?= number_format($isi->lembur);?></td>
       <td><?= number_format($isi->uang_makan);?></td>
       <td><?= number_format($isi->transport);?></td>
       <td><?= number_format($isi->bpjs);?></td>
       <td><?= number_format($isi->pph21);?></td>
+      <?php } ?>
       <td>
         <?php 
         $total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->bpjs + $isi->pph21);
@@ -58,10 +68,14 @@ case 'list':
         ?>
       </td>
       <td align="center">
-          <a href="index.php?p=gaji&page=edit&id=<?= $isi->id_gaji ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-          <a href="gaji/aksi_gaji.php?id=<?= $isi->id_gaji ?>" onclick="return confirm('Yakin Hapus ?')"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
-        </td>
+        <?php if($p=="gaji"){ ?>
+        <a href="index.php?p=gaji&page=edit&id=<?= $isi->id_gaji ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="gaji/aksi_gaji.php?id=<?= $isi->id_gaji ?>" onclick="return confirm('Yakin Hapus ?')"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
+        <?php }elseif($p=="cetak_slipgaji"){ ?>
+        <a href="gaji/cetak_slipgaji.php?id=<?= $isi->id_gaji ?>" target="_blank"><i class="glyphicon glyphicon-file"> Cetak</i></a>
+        <?php } ?>
+      </td>
     </tr>
   <?php } ?>
   </tbody>
@@ -71,24 +85,31 @@ break;
 
 case 'entri':
 ?>
+<?php if($p=="gaji"){ ?>
 <h1>Form Gaji</h1>
 <form id="form1" name="form1" method="post" action="gaji/aksi_gaji.php">
   <div class="row">
     <div class="col-lg-4">
       <div class="form-group">
-        <label>Pilih Pegawai</label>
-        <select class="form-control" name="nip" required="">
-          <option value="">--- Pilih Pegawai ---</option>
+        <label>Pilih Perusahaan</label>
+        <select class="form-control" name="id_perusahaan" required="" onclick="getPegawai(this.value)">
+          <option value="">--- Pilih Perusahaan ---</option>
           <?php
-            $sqlPegawai = "SELECT * FROM pegawai ORDER BY nama ASC";
-            $rowPegawai = $koneksi->prepare($sqlPegawai);
-            $rowPegawai->execute();
-            $hasilPegawai = $rowPegawai->fetchAll(PDO::FETCH_OBJ);
+            $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+            $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
+            $rowPerusahaan->execute();
+            $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
             
-            foreach($hasilPegawai as $isiPegawai){
+            foreach($hasilPerusahaan as $isiPerusahaan){
           ?>
-          <option value="<?= $isiPegawai->nip ?>"><?= $isiPegawai->nip." - ".$isiPegawai->nama ?></option>
+          <option value="<?= $isiPerusahaan->id_perusahaan ?>"><?= $isiPerusahaan->nama ?></option>
           <?php } ?>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Pilih Pegawai</label>
+        <select class="form-control" name="nip" id="nip" required="">
+          <option value="">--- Pilih Pegawai ---</option>
         </select>
       </div>
       <div class="form-group">
@@ -132,17 +153,24 @@ case 'entri':
     </div>
   </div>
 </form>
+<?php } ?>
 <?php
 break;
 
 case 'edit':
+if($p=="gaji"){
+
 $id_gaji = $_GET['id'];
-$sql = "SELECT * FROM gaji WHERE id_gaji='$id_gaji'";
+$sql = "SELECT a.*, b.nama, c.nama nama_perusahaan FROM gaji a 
+            JOIN pegawai b ON a.nip=b.nip
+            JOIN perusahaan c ON b.id_perusahaan=c.id_perusahaan
+            WHERE id_gaji='$id_gaji'";
 $row = $koneksi->prepare($sql);
 $row->execute();
 $isi = $row->fetch(PDO::FETCH_OBJ);
 
-$nip = $isi->nip;
+$nama_perusahaan = $isi->nama_perusahaan;
+$nama = $isi->nama;
 $gaji = $isi->gaji;
 $lembur = $isi->lembur;
 $uang_makan = $isi->uang_makan;
@@ -155,20 +183,12 @@ $pph21 = $isi->pph21;
   <div class="row">
     <div class="col-lg-4">
       <div class="form-group">
-        <label>Pilih Pegawai</label>
-        <select class="form-control" name="nip" disabled="">
-          <option value="">--- Pilih Pegawai ---</option>
-          <?php
-            $sqlPegawai = "SELECT * FROM pegawai ORDER BY nama ASC";
-            $rowPegawai = $koneksi->prepare($sqlPegawai);
-            $rowPegawai->execute();
-            $hasilPegawai = $rowPegawai->fetchAll(PDO::FETCH_OBJ);
-            
-            foreach($hasilPegawai as $isiPegawai){
-          ?>
-          <option value="<?= $isiPegawai->nip ?>" <?= ($nip==$isiPegawai->nip)? "selected": ""; ?>><?= $isiPegawai->nip." - ".$isiPegawai->nama ?></option>
-          <?php } ?>
-        </select>
+        <label>Perusahaan</label>
+        <input type="text" class="form-control" name="" value="<?= $nama_perusahaan ?>" readonly="">
+      </div>
+      <div class="form-group">
+        <label>Pegawai</label>
+        <input type="text" class="form-control" name="pegawai" value="<?= $nama ?>" readonly="">
       </div>
       <div class="form-group">
         <label>Gaji Pokok</label>
@@ -212,7 +232,18 @@ $pph21 = $isi->pph21;
     </div>
   </div>
 </form>
+<?php } ?>
 <?php
 break;
 }
 ?>
+<script>
+  function getPegawai(id_perusahaan){
+    $("#nip").load("gaji/ajax/getPegawai.php?id_perusahaan="+id_perusahaan, function(responseTxt, statusTxt, xhr){
+      if(statusTxt == "success");
+        // alert("External content loaded successfully!");
+      if(statusTxt == "error");
+        // alert("Error: " + xhr.status + ": " + xhr.statusText);
+    });
+  }
+</script>

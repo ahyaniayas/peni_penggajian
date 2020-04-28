@@ -7,16 +7,16 @@
     <title>PT ESSEI PERBAMA</title>
 
     <!-- Core CSS - Include with every page -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../assets/font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="../css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="../css/plugins/timeline/timeline.css" rel="stylesheet">
+    <link href="../assets/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="../assets/css/plugins/timeline/timeline.css" rel="stylesheet">
 
     <!-- SB Admin CSS - Include with every page -->
-    <link href="../css/sb-admin.css" rel="stylesheet">
+    <link href="../assets/css/sb-admin.css" rel="stylesheet">
 </head>
 <body>
     <div id="wrapper">
@@ -43,10 +43,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                            <a href="#"><i class="fa fa-gear fa-fw"></i> Ubah Password</a>
                         </li>
                         <li class="divider"></li>
                         <li>

@@ -28,15 +28,42 @@ if(!isset($_SESSION['username'])){
 
             <?php if ($_SESSION['level']=='spv'){?>
             <li>
-                <a href="?p=pegawai"><i class="fa fa-table fa-fw"></i> Pegawai</a>
+                <small style="padding-left: 15px;">Perusahaan</small>
             </li>
             <li>
-                <a href="?p=gaji"><i class="fa fa-edit fa-fw"></i> Gaji</a>
+                <a href="?p=perusahaan"><i class="fa fa-building-o fa-fw"></i> Data Perusahaan</a>
+            </li>
+            <li>
+                <a href="?p=pegawai"><i class="fa fa-table fa-fw"></i> Data Pegawai</a>
+            </li>
+            <li>
+                <small style="padding-left: 15px;">Gaji</small>
+            </li>
+            <li>
+                <a href="?p=gaji"><i class="fa fa-edit fa-fw"></i> Data Gaji</a>
+            </li>
+            <li>
+                <a href="?p=cetak_slipgaji"><i class="fa fa-file-o fa-fw"></i> Cetak Slip Gaji</a>
             </li>
 
             <?php } if ($_SESSION['level']=='keu'){?>
             <li>
-                <a href="?p=invoice"><i class="fa fa-edit fa-fw"></i> Invoice</a>
+                <small style="padding-left: 15px;">Invoice</small>
+            </li>
+            <li>
+                <a href="?p=invoice"><i class="fa fa-edit fa-fw"></i> Data Invoice</a>
+            </li>
+            <li>
+                <a href="?p=cetak_invoice"><i class="fa fa-edit fa-fw"></i> Cetak Invoice</a>
+            </li>
+            <li>
+                <a href="?p=invoice&page=laporan"><i class="fa fa-edit fa-fw"></i> Laporan Invoice</a>
+            </li>
+            <li>
+                <small style="padding-left: 15px;">Pembayaran</small>
+            </li>
+            <li>
+                <a href="?p=pembayaran"><i class="fa fa-edit fa-fw"></i> Data Pembayaran</a>
             </li>
             <?php } ?>
         </ul>

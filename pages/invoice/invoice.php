@@ -1,338 +1,314 @@
 <?php
-include ('koneksi.php');
-$page=isset($_GET['page']) ? $_GET['page'] : 'list';
+
+if($_SESSION['level']!="keu"){
+  echo "<script>location='index.php'</script>";
+}
+
+include_once '_part/koneksi.php';
+
+$p = $_GET['p'];
+$page = isset($_GET['page']) ? $_GET['page'] : 'list';
 switch ($page) {
 case 'list':
+
+if($p=="invoice"){
+  $judul = "Data Invoice";
+}elseif($p=="cetak_invoice"){
+  $judul = "Cetak Invoice";
+}elseif($p=="pembayaran"){
+  $judul = "Data pembayaran";
+}
 ?>
-<h1> Input Invoice </h1>
-<a href="index.php?p=invoice&page=entri" class="btn btn-success"><span class="glyphicon glyphicon-plus"> Tambah</span></a>
-<a href="index.php?p=invoice&page=cari" class="btn btn-success"><span class="glyphicon glyphicon-download-alt" target="_blank"> Laporan</span></a>
-<p>
-<table width="492" border="1" class="table table-striped">
+<h1><?= $judul ?></h1>
+<div class="row" style="margin: 20px auto;">
+  <?php if($p=="invoice"){ ?>
+  <a href="index.php?p=invoice&page=entri" class="btn btn-success"><span class="glyphicon glyphicon-plus"> Tambah</span></a>
+  <?php } ?>
+</div>
+<table id="example" class="table table-striped table-bordered">
+  <thead>
     <tr>
-	  <td width="21"><div align="center"><strong>No Inv</strong></div></td>
-      <td width="21"><div align="center"><strong>Total Gaji</strong></div></td>
-      <td width="105"><div align="center"><strong>Management fee</strong></div></td>
-      <td width="120"><div align="center"><strong>PPN </strong></div></td>
-      <td width="105"><div align="center"><strong>PPH 23</strong></div></td>
-      <td width="105"><div align="center"><strong>Total Invoice</strong></div></td>
-	  <td width="105"><div align="center"><strong>Pembayaran</strong></div></td>
-	  <td width="105"><div align="center"><strong>Saldo Akhir</strong></div></td>
+      <th>No. Invoice</th>
+      <th>Tanggal</th>
+      <th>Perusahaan</th>
+      <?php if($p=="invoice"){ ?>
+      <th>Total Gaji</th>
+      <th>M Fee</th>
+      <th>PPN</th>
+      <th>PPH 23</th>
+      <?php } ?>
+      <th>Total</th>
+      <?php if($p=="pembayaran"){ ?>
+      <th>Bayar</th>
+      <th>Tgl. Bayar</th>
+      <th>Saldo</th>
+      <?php } ?>
+      <th>Status</th>
+      <th>Aksi</th>
     </tr>
+  </thead>
+  <tbody>
 	<?php
-		$tampil=mysql_query("select * from invoice");
-		$no=1;
-		while($data=mysql_fetch_array($tampil))
-		{
+		$sql = "SELECT a.*, b.nama nama_perusahaan FROM invoice a JOIN perusahaan b ON a.id_perusahaan=b.id_perusahaan";
+    $row = $koneksi->prepare($sql);
+    $row->execute();
+    $hasil = $row->fetchAll(PDO::FETCH_OBJ);
+		
+		foreach($hasil as $isi){
 	?>
     <tr>
-	  <td><div align="center"><?php echo $data['no_inv'];?></div></td>
-      <td><div align="center"><?php echo $data['Total_Gaji'];?></div></td>
-      <td><div align="left"><?php echo $data['Management_Fee'];?></div>
-      <td><div align="center"><?php echo $data['PPN'];?></div></td>
-      <td><div align="center"><?php echo $data['PPH_23'];?></div></td>
-      <td><div align="center"><?php echo $data['Total_Invoice'];?></div></td>
-	  <td><div align="center"><?php echo $data['Pembayaran'];?></div></td>
-	  <td><div align="center"><?php echo $data['Saldo_Akhir'];?></div></td>
-      <td><div align="left"><a href="invoice/aksi_invoice.php?proses=hapus&no_inv=<?php echo $data['no_inv']?>"><span class="glyphicon glyphicon-floppy-remove"> Hapus</span></a><br />
-	        <a href="index.php?p=gaji&page=edit&no_inv=<?php echo $data['no_inv']?>"><span class="glyphicon glyphicon-edit"> Edit</span></a></div></td>
+      <td><?= $isi->nomor;?></td>
+      <td><span style='display: none;'><?= date('Ymd', strtotime($isi->tgl_invoice)) ?></span><?= date("d-m-Y", strtotime($isi->tgl_invoice));?></td>
+      <td><?= $isi->nama_perusahaan;?></td>
+      <?php if($p=="invoice"){ ?>
+      <td><?= number_format($isi->total_gaji);?></td>
+      <td><?= number_format($isi->mfee);?></td>
+      <td><?= number_format($isi->mfee * 10 / 100);?></td>
+      <td><?= number_format($isi->mfee * 2 /100);?></td>
+      <?php } ?>
+      <td><?= number_format(($isi->total_gaji + $isi->mfee + ($isi->mfee*10/100)) - ($isi->mfee*2/100));?></td>
+      <?php if($p=="pembayaran"){ ?>
+      <td><?= $isi->bayar>0? number_format($isi->bayar): ""; ?></td>
+      <td><?= $isi->bayar>0? "<span style='display: none;'><?= date('Ymd', strtotime($isi->tgl_bayar)) ?></span>".date("d-m-Y", strtotime($isi->tgl_bayar)): ""; ?></td>
+      <td><?= number_format((($isi->total_gaji + $isi->mfee + ($isi->mfee*10/100)) - ($isi->mfee*2/100)) - $isi->bayar);?></td>
+      <?php } ?>
+      <td><?= $isi->bayar>0? "Dibayar": "Belum Dibayar"; ?></td>
+      <td align="center">
+        <?php if($p=="invoice"){ ?>
+        <a href="index.php?p=invoice&page=edit&id=<?= $isi->id_invoice ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="invoice/aksi_invoice.php?id=<?= $isi->id_invoice ?>" onclick="return confirm('Yakin Hapus ?')"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
+        <?php }elseif($p=="pembayaran"){ ?>
+        <a href="index.php?p=pembayaran&page=edit&id=<?= $isi->id_invoice ?>"><i class="glyphicon glyphicon-pencil"> Bayar</i></a>
+        <?php }elseif($p=="cetak_invoice"){ ?>
+        <a href="invoice/cetak_invoice.php?id=<?= $isi->id_invoice ?>" target="_blank"><i class="glyphicon glyphicon-file"> Cetak</i></a>
+        <?php } ?>
+      </td>
     </tr>
-	<?php
-		$no++;
-		}
-	?>
+	<?php } ?>
+  </tbody>
 </table>
 <?php
 break;
+
 case 'entri':
 ?>
-
-<h1> Form Invoice </h1>
-<form id="form1" name="form1" method="post" action="invoice/aksi_invoice.php?proses=entri">
-  <table width="311" border="0">
-    
-    <tr>
-      <td>Total Gaji</td>
-      <td><label>
-        <input type="text" name="total_gaji" />
-      </label></td>
-    </tr>
-    <tr>
-      <td>Management fee</td>
-      <td><label>
-        <select class="form-control" name="Management_fee">
-                      <option value="<?php echo $data['Management_fee']; ?>"></option> 
-                      <?php
-                        $query=mysql_query("select Management_fee from pegawai");
-                            while ($data=mysql_fetch_array($query)) {
-                              echo "<option value=".$data['Management_fee'].">".$data['Management_fee']."</option>";
-                        }
-
-                      ?>
-                   </select>
-      </label></td>
-    </tr>
-	<tr>
-      <td>PPN</td>
-      <td><label>
-        <input type="text" name="PPN" />
-      </label></td>
-    </tr>
-	<tr>
-      <td>PPH 23</td>
-      <td><label>
-        <input type="text" name="PPH_23" />
-      </label></td>
-    </tr>
-	<tr>  <td>Total Invoice</td>
-      <td><label>
-        <input type="text" name="PPH_23" />
-      </label></td>
-    </tr>
-	<tr>
-    <tr>  <td>Pembayaran</td>
-      <td><label>
-        <input type="text" name="PPH_23" />
-      </label></td>
-    </tr>
-	<tr>
-	<tr>  <td>Saldo Akhir</td>
-      <td><label>
-        <input type="text" name="PPH_23" />
-      </label></td>
-    </tr>
-	<tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td><label>
-        <button name="simpan" type="submit" id="simpan" value="Simpan" class="btn btn-primary">
-		    <span class="glyphicon glyphicon-floppy-disk">Simpan</span></button>
-		
-      </label></td>
-    </tr>
-  </table>
-  <p><a href="index.php?p=invoice">Tampilkan Invoice </a>  </p>
-</form>
-<?php
-break;
-case 'edit':
-$tampil = mysql_query("select * from invoice where no_inv='$_GET[no_inv]'");
-$data=mysql_fetch_array($tampil);
-?>
-<form id="form1" name="form1" method="post" action="invoice/aksi_invoice.php?proses=edit">
-  <table width="311" border="0">
-    <tr>
-      <td colspan="2"><div align="center"><strong>DATA INVOICE </strong></div></td>
-    </tr>
-    <tr>
-      <td width="94">No Inv </td>
-      <td width="207"><label>
-        <input type="text" name="no_inv" value = "<?php echo $data['no_inv']?>" readonly/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>Total Gaji</td>
-      <td><label>
-        <input type="text" name="Total_Gaji" value = "<?php echo $data['Total_Gaji']?>"/>
-      </label></td>
-    </tr>
-    <tr>
-      <td>Management_fee</td>
-      <td><label>
-        <input type="text" name="Management_fee" value = "<?php echo $data['Management_fee']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>PPN</td>
-      <td><label>
-        <input type="text" name="PPN" value = "<?php echo $data['PPN']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>PPH 23</td>
-      <td><label>
-        <input type="text" name="PPH_23" value = "<?php echo $data['PPH_23']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>Total INVOICE</td>
-      <td><label>
-        <input type="text" name="Total_Invoice" value = "<?php echo $data['Total_Invoice']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-	<td>Pembayaran</td>
-      <td><label>
-        <input type="text" name="Pembayaran" value = "<?php echo $data['Pembayaran']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-	<td>Saldo Akhir</td>
-      <td><label>
-        <input type="text" name="Saldo_Akhir" value = "<?php echo $data['Saldo_Akhir']?>"/>
-      </label></td>
-    </tr>
-	<tr>
-      <td>&nbsp;</td>
-      <td><label>
-        <input name="simpan" type="submit" id="simpan" value="Simpan" class="btn btn-primary" />
-      </label></td>
-    </tr>
-  </table>
-</form>
-
-
-<?php
-break;
-  case 'cari':
-  ob_start();
-  $cari = mysql_query("SELECT * FROM gaji where month(tgl_gaji)='$_POST[bulan]'");
-  $data=mysql_fetch_array($cari); 
-?>
-
-<h1> Laporan Invoice </h1>
-<form id="form1" name="form1" method="post" action="">
-<tr>
-      <td width="94">Bulan</td>
-      <select name="bulan">
-        <option value="01">Januari</option>
-        <option value="02">Februari</option>
-        <option value="03">Maret</option>
-        <option value="04">April</option>
-        <option value="05">Mei</option>
-        <option value="06">Juni</option>
-        <option value="07">Juli</option>
-        <option value="08">Agustus</option>
-        <option value="09">September</option>
-        <option value="10">Oktober</option>
-        <option value="11">November</option>
-        <option value="12">Desember</option>
-      </select>
-
-      <select name="tahun">
+<?php if($p=="invoice"){ ?>
+<h1>Form Invoice</h1>
+<form id="form1" name="form1" method="post" action="invoice/aksi_invoice.php">
+  <div class="col-lg-4">
+    <div class="form-group">
+      <label>Pilih Perusahaan</label>
+      <select class="form-control" name="id_perusahaan" required="">
+        <option value="">--- Pilih Perusahaan ---</option>
         <?php
-            $mulai= date('Y') - 10;
-            for($i = $mulai;$i<$mulai + 20;$i++){
-                $sel = $i == date('Y') ? ' selected="selected"' : '';
-                echo '<option value="'.$i.'"'.$sel.'>'.$i.'</option>';
-            }
-            ?>
+          $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+          $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
+          $rowPerusahaan->execute();
+          $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
+          
+          foreach($hasilPerusahaan as $isiPerusahaan){
+        ?>
+        <option value="<?= $isiPerusahaan->id_perusahaan ?>"><?= $isiPerusahaan->nama ?></option>
+        <?php } ?>
       </select>
-
-
-    </tr>
-<tr>
-      <td>&nbsp;</td>
-      <td><label>
-        <button name="cari" type="submit" id="submit" value="submit" class="btn btn-primary">
-    <span class="glyphicon glyphicon-find">Cari</span></button>
-</label></td></tr>  
+    </div>
+    <div class="form-group">
+      <label>Total Gaji</label>
+      <input type="number" class="form-control" name="total_gaji" placeholder="Masukkan Total Gaji">
+    </div>
+    <div class="form-group">
+      <label>Management Fee</label>
+      <input type="number" class="form-control" name="mfee" placeholder="Masukkan Management Fee" onkeyup="setData(this.value)">
+    </div>
+    <div class="form-group">
+      <label>PPN</label>
+      <input type="number" class="form-control" id="ppn" placeholder="Masukkan PPN" readonly="">
+    </div>
+    <div class="form-group">
+      <label>PPH 23</label>
+      <input type="number" class="form-control" id="pph23" placeholder="Masukkan PPH 23" readonly="">
+    </div>
+    <div class="form-group">
+      <button name="proses" type="submit" value="simpan" class="btn btn-primary">
+        <i class="glyphicon glyphicon-floppy-disk"></i>	Simpan
+      </button>
+    </div>
+    <div class="form-group">
+      <a href="index.php?p=invoice">Tampilkan Tabel Invoice</a>
+    </div>
+  </div>
 </form>
-
- <table width="492" border="1" class="table table-striped">
-    <tr>
-      <td width="21"><div align="center"><strong>No Inv</strong></div></td>
-      <td width="21"><div align="center"><strong>Total Gaji</strong></div></td>
-      <td width="105"><div align="center"><strong>Management fee</strong></div></td>
-      <td width="120"><div align="center"><strong>PPN </strong></div></td>
-      <td width="105"><div align="center"><strong>PPH 23</strong></div></td>
-      <td width="105"><div align="center"><strong>Total Invoice</strong></div></td>
-      <td width="105"><div align="center"><strong>Pembayaran</strong></div></td>
-      <td width="105"><div align="center"><strong>Saldo Akhir</strong></div></td>
-    </tr>
-  <?php
-    $gji = mysql_query("select * from gaji,pegawai,invoice where month(no_inv)='$_POST[bulan]' and year(no_inv) = '$_POST[tahun]' and gaji.nip=pegawai.nip");
-    $no=1;
-    while($data=mysql_fetch_array($gji))
-    {
-  ?>
-    <tr>
-      <td><div align="center"><?php echo $data['no_inv'];?></div></td>
-      <td><div align="left"><?php echo $data['Total_Gaji'];?></div>
-      <td><div align="center"><?php echo $data['Management_fee'];?></div></td>
-      <td><div align="center"><?php echo $data['PPN'];?></div></td>
-      <td><div align="center"><?php echo $data['PPH_23'];?></div></td>
-      <td><div align="center"><?php echo $data['Total_Invoice'];?></div></td>
-      <td><div align="center"><?php echo $data['Pembayaran'];?></div></td>
-      <td><div align="center"><?php echo $data['Saldo_Akhir'];?></div></td>
-      <td><div align="left"><a href="index.php?p=gaji&page=cetak&no_inv=<?php echo $data['no_inv']?>"><span class="glyphicon glyphicon-print"> Cetak</span></a><br />        
-    </tr>
-    </tr>
-  <?php
-    $no++;
-    }
-  ?>
-</table>
-
+<?php } ?>
 <?php
 break;
-case 'cetak':
-$tampil = mysql_query("SELECT * from gaji,pegawai where no_inv='$_GET[no_inv]' and gaji.Management_fee=pegawai.Management_fee");
-$data=mysql_fetch_array($tampil);
+
+case 'edit':
+if($p=="invoice"){
+$id_invoice = $_GET['id'];
+$sql = "SELECT * FROM invoice WHERE id_invoice='$id_invoice'";
+$row = $koneksi->prepare($sql);
+$row->execute();
+$isi = $row->fetch(PDO::FETCH_OBJ);
+
+$total_gaji = $isi->total_gaji;
+$mfee = $isi->mfee;
+$ppn = $isi->mfee*10/100;
+$pph23 = $isi->mfee*2/100;
+$id_perusahaan = $isi->id_perusahaan;
 ?>
-<h4> <B>INVOICE </B></h4>
-  <table width="311" border="0">
-    
-    <tr>
-      <td width="150">Id Gaji</td>
-      <td width="150"> : </td>
-      <td width="160"><?php echo $data['no_inv']?> </td>
-      <td width="207"><label>
-        </label></td>
-    </tr>
-    <tr>
-      <td width="150">Tanggal Gaji </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['tgl_gaji']?> </td>
-      <td width="207"><label>
-    </tr>
-    <tr>
-      <td width="150">Management_fee </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['Management_fee']?> </td>
-      <td width="207"><label>
-    </tr>
-    <tr>
-      <td width="150">Nama </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['nama']?> </td>
-      <td width="207"><label>
-    </tr>
-    <td width="150">No Hp </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['nohp']?> </td>
-      <td width="207"><label>
-    </tr>
-  <tr>
-      <td width="150">Alamat </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['alamat']?> </td>
-      <td width="207"><label>
-  <tr>
-      <td width="150">Gaji Pokok</td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['gaji_pokok']?> </td>
-      <td width="207"><label>
-    </tr>
-  <tr>
-      <td width="150">Tunjangan </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['tunjangan']?> </td>
-      <td width="207"><label>
-  <tr>
-      <td width="150">Potongan </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['potongan']?> </td>
-      <td width="207"><label>
-    <tr>
-      <td width="150">Total Gaji </td>
-      <td width="150"> : </td>
-      <td width="150"><?php echo $data['total_gaji']?> </td>
-      <td width="207"><label>
-  </table>
+<h1>Edit Invoice</h1>
+<form id="form1" name="form1" method="post" action="invoice/aksi_invoice.php">
+  <div class="col-lg-4">
+    <div class="form-group">
+      <label>Pilih Perusahaan</label>
+      <select class="form-control" name="id_perusahaan" disabled="">
+        <option value="">--- Pilih Perusahaan ---</option>
+        <?php
+          $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+          $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
+          $rowPerusahaan->execute();
+          $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
+          
+          foreach($hasilPerusahaan as $isiPerusahaan){
+        ?>
+        <option value="<?= $isiPerusahaan->id_perusahaan ?>" <?= $id_perusahaan==$isiPerusahaan->id_perusahaan? "selected": ""; ?>><?= $isiPerusahaan->nama ?></option>
+        <?php } ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Total Gaji</label>
+      <input type="number" class="form-control" name="total_gaji" placeholder="Masukkan Total Gaji" value="<?= $total_gaji ?>">
+    </div>
+    <div class="form-group">
+      <label>Management Fee</label>
+      <input type="number" class="form-control" name="mfee" placeholder="Masukkan Management Fee" value="<?= $mfee ?>" onkeyup="setData(this.value)">
+    </div>
+    <div class="form-group">
+      <label>PPN</label>
+      <input type="number" class="form-control" id="ppn" placeholder="Masukkan PPN" value="<?= $ppn ?>" readonly="">
+    </div>
+    <div class="form-group">
+      <label>PPH 23</label>
+      <input type="number" class="form-control" id="pph23" placeholder="Masukkan PPH 23" value="<?= $pph23 ?>" readonly="">
+    </div>
+    <div class="form-group">
+      <input type="hidden" name="id_invoice" value="<?= $id_invoice ?>">
+      <button name="proses" type="submit" value="edit" class="btn btn-primary">
+        <i class="glyphicon glyphicon-floppy-disk"></i> Simpan
+      </button>
+    </div>
+    <div class="form-group">
+      <a href="index.php?p=invoice">Tampilkan Tabel Invoice</a>
+    </div>
+  </div>
+</form>
 
+<?php
+}elseif($p=="pembayaran"){
 
+$id_invoice = $_GET['id'];
+$sql = "SELECT a.*, b.nama nama_perusahaan FROM invoice a 
+        JOIN perusahaan b ON a.id_perusahaan=b.id_perusahaan
+        WHERE id_invoice='$id_invoice'";
+$row = $koneksi->prepare($sql);
+$row->execute();
+$isi = $row->fetch(PDO::FETCH_OBJ);
+
+$nomor = $isi->nomor;
+$tgl_invoice = $isi->tgl_invoice;
+$nama_perusahaan = $isi->nama_perusahaan;
+$total = number_format(($isi->total_gaji + $isi->mfee + ($isi->mfee*10/100)) - ($isi->mfee*2/100));
+$bayar = $isi->bayar;
+?>
+<h1>Bayar Invoice</h1>
+<form id="form1" name="form1" method="post" action="invoice/aksi_invoice.php">
+  <div class="col-lg-4">
+    <div class="form-group">
+      <label>No. Invoice</label>
+      <input type="text" class="form-control" value="<?= $nomor ?>" readonly="">
+    </div>
+    <div class="form-group">
+      <label>Tanggal</label>
+      <input type="text" class="form-control" value="<?= date('d-m-Y', strtotime($tgl_invoice)) ?>" readonly="">
+    </div>
+    <div class="form-group">
+      <label>Perusahaan</label>
+      <input type="text" class="form-control" value="<?= $nama_perusahaan ?>" readonly="">
+    </div>
+    <div class="form-group">
+      <label>Total</label>
+      <input type="text" class="form-control" value="<?= $total ?>" readonly="">
+    </div>
+    <div class="form-group">
+      <label>Bayar</label>
+      <input type="number" class="form-control" name="bayar" placeholder="Masukkan Jumlah Bayar" value="<?= $bayar ?>" required="">
+    </div>
+    <div class="form-group">
+      <input type="hidden" name="id_invoice" value="<?= $id_invoice ?>">
+      <button name="proses" type="submit" value="bayar" class="btn btn-primary">
+        <i class="glyphicon glyphicon-floppy-disk"></i> Simpan
+      </button>
+    </div>
+    <div class="form-group">
+      <a href="index.php?p=pembayaran">Tampilkan Tabel Pembayaran</a>
+    </div>
+  </div>
+</form>
+<?php } ?>
+<?php
+break;
+
+case 'laporan':
+if($p=="invoice"){
+?>
+<h1>Laporan Invoice</h1>
+<form id="form1" name="form1" method="post" action="invoice/laporan_invoice.php" target="_blank">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <label>Periode</label>
+        <select name="periode">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+        </select>
+        <span>Bulan Terakhir</span>
+      </div>
+      <div class="form-group">
+        <select class="form-control" name="status">
+          <option value="all">Semua</option>
+          <option value="1">Dibayar</option>
+          <option value="0">Belum Dibayar</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <button name="proses" type="submit" value="bayar" class="btn btn-primary">
+          <i class="glyphicon glyphicon-file"></i> Cetak Laporan
+        </button>
+      </div>
+      <div class="form-group">
+        <a href="index.php?p=invoice">Tampilkan Tabel Invoice</a>
+      </div>
+    </div>
+  </div>
+</form>
+<?php } ?>
 <?php
 break;
 }
 ?>
+
+<script>
+  function setData(val){
+    $("#ppn").val(val * 10 /100);
+    $("#pph23").val(val * 2 /100);
+  }
+</script>

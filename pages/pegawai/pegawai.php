@@ -17,7 +17,8 @@ case 'list':
 <table id="example" class="table table-striped table-bordered">
   <thead>
     <tr>
-      <th>NIP</th>
+      <th>Perusahaan</th>
+      <th>NIK</th>
       <th>Nama</th>
       <th>Alamat</th>
       <th>Jabatan</th>
@@ -27,7 +28,7 @@ case 'list':
   </thead>
   <tbody>
 	<?php
-		$sql = "SELECT * FROM pegawai";
+		$sql = "SELECT a.*, b.nama nama_perusahaan FROM pegawai a JOIN perusahaan b ON a.id_perusahaan=b.id_perusahaan";
     $row = $koneksi->prepare($sql);
     $row->execute();
     $hasil = $row->fetchAll(PDO::FETCH_OBJ);
@@ -35,16 +36,17 @@ case 'list':
 		foreach($hasil as $isi){
 	?>
     <tr>
+      <td><?= $isi->nama_perusahaan;?></td>
       <td><?= $isi->nip;?></td>
       <td><?= $isi->nama;?></td>
       <td><?= $isi->alamat;?></td>
       <td><?= $isi->jabatan;?></td>
       <td><?= $isi->nohp;?></td>
       <td align="center">
-          <a href="index.php?p=pegawai&page=edit&nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-          <a href="pegawai/aksi_pegawai.php?nip=<?= $isi->nip ?>" onclick="return confirm('Yakin Hapus ?')"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
-        </td>
+        <a href="index.php?p=pegawai&page=edit&nip=<?= $isi->nip ?>"><i class="glyphicon glyphicon-edit"> Edit</i></a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="pegawai/aksi_pegawai.php?nip=<?= $isi->nip ?>" onclick="return confirm('Yakin Hapus ?')"><i class="glyphicon glyphicon-floppy-remove"> Hapus</i></a>
+      </td>
     </tr>
 	<?php } ?>
   </tbody>
@@ -58,8 +60,24 @@ case 'entri':
 <form id="form1" name="form1" method="post" action="pegawai/aksi_pegawai.php">
   <div class="col-lg-4">
     <div class="form-group">
-      <label>NIP</label>
-      <input type="number" class="form-control" name="nip" placeholder="Masukkan NIP" required="">
+      <label>Pilih Perusahaan</label>
+      <select class="form-control" name="id_perusahaan" required="">
+        <option value="">--- Pilih Perusahaan ---</option>
+        <?php
+          $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+          $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
+          $rowPerusahaan->execute();
+          $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
+          
+          foreach($hasilPerusahaan as $isiPerusahaan){
+        ?>
+        <option value="<?= $isiPerusahaan->id_perusahaan ?>"><?= $isiPerusahaan->nama ?></option>
+        <?php } ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>NIK</label>
+      <input type="number" class="form-control" name="nip" placeholder="Masukkan NIK" required="">
     </div>
     <div class="form-group">
       <label>Nama</label>
@@ -101,13 +119,30 @@ $nama = $isi->nama;
 $alamat = $isi->alamat;
 $jabatan = $isi->jabatan;
 $nohp = $isi->nohp;
+$id_perusahaan = $isi->id_perusahaan;
 ?>
 <h1>Edit Pegawai</h1>
 <form id="form1" name="form1" method="post" action="pegawai/aksi_pegawai.php">
   <div class="col-lg-4">
     <div class="form-group">
-      <label>NIP</label>
-      <input type="number" class="form-control" name="nip" placeholder="Masukkan NIP" value="<?= $nip ?>" readonly="">
+      <label>Pilih Perusahaan</label>
+      <select class="form-control" name="id_perusahaan" disabled="">
+        <option value="">--- Pilih Perusahaan ---</option>
+        <?php
+          $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+          $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
+          $rowPerusahaan->execute();
+          $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
+          
+          foreach($hasilPerusahaan as $isiPerusahaan){
+        ?>
+        <option value="<?= $isiPerusahaan->id_perusahaan ?>" <?= $id_perusahaan==$isiPerusahaan->id_perusahaan? "selected": ""; ?>><?= $isiPerusahaan->nama ?></option>
+        <?php } ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>NIK</label>
+      <input type="number" class="form-control" name="nip" placeholder="Masukkan NIK" value="<?= $nip ?>" readonly="">
     </div>
     <div class="form-group">
       <label>Nama</label>

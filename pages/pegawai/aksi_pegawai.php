@@ -13,8 +13,9 @@ if($proses=='simpan'){
 	$alamat=$_POST['alamat'];
 	$jabatan=$_POST['jabatan'];
 	$nohp=$_POST['nohp'];
+	$id_perusahaan=$_POST['id_perusahaan'];
 
-	$sql = "INSERT INTO pegawai(nip, nama, alamat, jabatan, nohp) values ('$nip', '$nama', '$alamat', '$jabatan', '$nohp')";
+	$sql = "INSERT INTO pegawai(nip, nama, alamat, jabatan, nohp, id_perusahaan) values ('$nip', '$nama', '$alamat', '$jabatan', '$nohp', '$id_perusahaan')";
 	$row = $koneksi->prepare($sql);
 	$row->execute();
 	echo "<script>alert('Tambah Berhasil'); location='../index.php?p=pegawai&page=entri'</script>";
