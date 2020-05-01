@@ -20,6 +20,7 @@ case 'list':
       <th>Perusahaan</th>
       <th>NIK</th>
       <th>Nama</th>
+	  <th>Nomor Rekening</th>
       <th>Alamat</th>
       <th>Jabatan</th>
       <th>No. Hp</th>
@@ -39,6 +40,7 @@ case 'list':
       <td><?= $isi->nama_perusahaan;?></td>
       <td><?= $isi->nip;?></td>
       <td><?= $isi->nama;?></td>
+	  <td><?= $isi->nomor_rekening;?></td>
       <td><?= $isi->alamat;?></td>
       <td><?= $isi->jabatan;?></td>
       <td><?= $isi->nohp;?></td>
@@ -82,6 +84,10 @@ case 'entri':
     <div class="form-group">
       <label>Nama</label>
       <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama">
+    </div>
+	<div class="form-group">
+      <label>Nomor Rekening</label>
+      <input type="text" class="form-control" name="nomor_rekening" placeholder="Masukkan Nomor Rekening">
     </div>
     <div class="form-group">
       <label>Alamat</label>
@@ -147,6 +153,10 @@ $id_perusahaan = $isi->id_perusahaan;
     <div class="form-group">
       <label>Nama</label>
       <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama" value="<?= $nama ?>">
+    </div>
+	<div class="form-group">
+      <label>Nomor Rekening</label>
+      <input type="text" class="form-control" name="nomor_rekening" placeholder="Masukkan Nomor Rekening" value="<?= $nomor_rekening ?>">
     </div>
     <div class="form-group">
       <label>Alamat</label>

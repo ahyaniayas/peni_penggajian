@@ -8,23 +8,26 @@ include ('../_part/koneksi.php');
 $proses = empty($_POST['proses'])? "": $_POST['proses']; 
 if($proses=='simpan'){
 
+	$tgl_invoice=$_POST['tgl_invoice'];
 	$total_gaji=$_POST['total_gaji'];
 	$mfee=$_POST['mfee'];
 	$id_perusahaan=$_POST['id_perusahaan'];
 
 	$nomor = "INV-".$id_perusahaan.date("dmYHis");
 
-	$sql = "INSERT INTO invoice(tgl_invoice, nomor, total_gaji, mfee, id_perusahaan) values (NOW(), '$nomor', '$total_gaji', '$mfee', '$id_perusahaan')";
+	$sql = "INSERT INTO invoice(tgl_invoice, nomor, total_gaji, mfee, id_perusahaan) values ('$tgl_invoice', '$nomor', '$total_gaji', '$mfee', '$id_perusahaan')";
 	$row = $koneksi->prepare($sql);
 	$row->execute();
 	echo "<script>alert('Tambah Berhasil'); location='../index.php?p=invoice&page=entri'</script>";
 
 }else if($proses=='edit'){
 	$id_invoice=$_POST['id_invoice'];
+	$tgl_invoice=$_POST['tgl_invoice'];
 	$total_gaji=$_POST['total_gaji'];
 	$mfee=$_POST['mfee'];
 
 	$sql = "UPDATE invoice SET 
+			tgl_invoice='$tgl_invoice',
 			total_gaji='$total_gaji',
 			mfee='$mfee'
 			where id_invoice='$id_invoice'";
@@ -35,10 +38,11 @@ if($proses=='simpan'){
 }else if($proses=='bayar'){
 	$id_invoice=$_POST['id_invoice'];
 	$bayar=$_POST['bayar'];
+	$tgl_bayar=$_POST['tgl_bayar'];
 
 	$sql = "UPDATE invoice SET 
 			bayar='$bayar',
-			tgl_bayar=NOW()
+			tgl_bayar='$tgl_bayar'
 			where id_invoice='$id_invoice'";
 	$row = $koneksi->prepare($sql);
 	$row->execute();

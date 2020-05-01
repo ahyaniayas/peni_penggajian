@@ -174,8 +174,7 @@ $html = <<<EOD
 <table cellpadding="5">
 	<tr>
 		<td class="bB" style="width: 10%; text-align: center">
-			// <img src="" style="width: 50px"/>
-			LOGO
+			<img src="../../assets/img/logo.jpg" style="width: 50px"/>
 		</td>
 		<td class="bB" style="width: 90%; text-align: center;">
 			PT ESSEI PERBAMA<br>
@@ -234,8 +233,8 @@ $html .= <<<EOD
 <table cellpadding="5">
 	<tr>
 		<td style="width: 70%"></td>
-		<td style="width: 30%; text-align: center;font-size: 6pt;">
-			ttd. PT ESSEI PERBAMA
+		<td style="width: 30%; text-align: center;font-size: 9pt;">
+			PT ESSEI PERBAMA
 		</td>
 	</tr>
 </table>

@@ -4,7 +4,7 @@
 
 body {
     padding-top: 100px;
-    background-color: #f8f8f8;
+    background-color: #f7f0f3;
 }
 
 @media(min-width:768px) {
@@ -24,7 +24,7 @@ body {
 #page-wrapper {
     padding: 0 15px;
     min-height: 568px;
-    background-color: #fff;
+    background-color: #f7f0f3;
 }
 
 @media(min-width:768px) {
@@ -33,7 +33,7 @@ body {
         margin: 0 0 0 250px;
         padding: 0 30px;
         min-height: 1300px;
-        border-left: 1px solid #e7e7e7;
+        border-left: 1px solid #f7f0f3;
     }
 }
 
@@ -100,7 +100,7 @@ body {
 /* Sidebar Menu Styles */
 
 .navbar-static-side ul li {
-    border-bottom: 1px solid #e7e7e7;
+    border-bottom: 1px solid #f7f0f3;
 }
 
 .sidebar-search {
@@ -167,28 +167,28 @@ body {
 
 .btn-outline {
     color: inherit;
-    background-color: transparent;
+    background-color: #f7f0f3;
     transition: all .5s;
 }
 
 .btn-primary.btn-outline {
-    color: #428bca;
+    color: #f7f0f3;
 }
 
 .btn-success.btn-outline {
-    color: #5cb85c;
+    color: #f7f0f3;
 }
 
 .btn-info.btn-outline {
-    color: #5bc0de;
+    color: #f7f0f3;
 }
 
 .btn-warning.btn-outline {
-    color: #f0ad4e;
+    color: #f7f0f3;
 }
 
 .btn-danger.btn-outline {
-    color: #d9534f;
+    color: #f7f0f3;
 }
 
 .btn-primary.btn-outline:hover,
@@ -196,7 +196,7 @@ body {
 .btn-info.btn-outline:hover,
 .btn-warning.btn-outline:hover,
 .btn-danger.btn-outline:hover {
-    color: #fff;
+    color: #f7f0f3;
 }
 
 /* Pages */
@@ -284,7 +284,7 @@ table.dataTable thead .sorting:after {
     content: "\f0dc";
     float: right;
     font-family: fontawesome;
-    color: rgba(50,50,50,.5);
+    color: f7f0f3;
 }
 
 /* Circle Buttons */
@@ -321,7 +321,7 @@ table.dataTable thead .sorting:after {
     padding-top: 10px;
     padding-bottom: 10px;
     border: 1px solid #ddd;
-    background-color: #eee !important;
+    background-color: #f7f0f3 !important;
 }
 
 .show-grid {

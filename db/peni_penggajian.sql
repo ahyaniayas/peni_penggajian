@@ -83,6 +83,7 @@ INSERT INTO `invoice` (`id_invoice`, `tgl_invoice`, `nomor`, `total_gaji`, `mfee
 CREATE TABLE `pegawai` (
   `nip` varchar(10) NOT NULL,
   `nama` varchar(50) NOT NULL,
+  `nomor_rekening` varchar(20) NOT NULL,
   `alamat` text NOT NULL,
   `jabatan` varchar(20) NOT NULL,
   `nohp` varchar(12) NOT NULL,
@@ -93,15 +94,15 @@ CREATE TABLE `pegawai` (
 -- Dumping data untuk tabel `pegawai`
 --
 
-INSERT INTO `pegawai` (`nip`, `nama`, `alamat`, `jabatan`, `nohp`, `id_perusahaan`) VALUES
-('1501091001', 'Tasyaa', 'Jakarta', 'Manager Keuangan', '081222675643', 2),
-('1501091002', 'Fara', 'Padang Panjang', 'Programmer', '081288123344', 3),
-('1501091003', 'Rangga', 'Depok', 'Operator', '089976554388', 3),
-('1501091004', 'Iding', 'Padang Pendek', 'Operator Jet', '083811436677', 3),
-('1501091006', 'Ahyani', 'bekasi barat daya', 'Direktur', '08127778767', 2),
-('1501091008', 'Huri', 'Jakarta', 'Kepala Bagian', '089938737766', 2),
-('1501091009', 'Alexa', 'Jakarta', 'Operator', '081233564487', 3),
-('989767554', 'Syukur', 'Bogor', 'Direktur Pelaksana', '081288126654', 4);
+INSERT INTO `pegawai` (`nip`, `nama`, `nomor_rekening`, `alamat`, `jabatan`, `nohp`, `id_perusahaan`) VALUES
+('1501091001', 'Tasyaa', '1560003606318', 'Jakarta', 'Manager Keuangan', '081222675643', 2),
+('1501091002', 'Fara', '1560003606319', 'Padang Panjang', 'Programmer', '081288123344', 3),
+('1501091003', 'Rangga', '1560003606310', 'Depok', 'Operator', '089976554388', 3),
+('1501091004', 'Iding', '1560003606311', 'Padang Pendek', 'Operator Jet', '083811436677', 3),
+('1501091006', 'Ahyani', '1560003606312', 'bekasi barat daya', 'Direktur', '08127778767', 2),
+('1501091008', 'Huri', '1560003606314', 'Jakarta', 'Kepala Bagian', '089938737766', 2),
+('1501091009', 'Alexa', '1560003606315', 'Jakarta', 'Operator', '081233564487', 3),
+('989767554', 'Syukur', '1560003606317', 'Bogor', 'Direktur Pelaksana', '081288126654', 4);
 
 -- --------------------------------------------------------
 
@@ -142,8 +143,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`username`, `nama`, `password`, `level`) VALUES
-('adminkeu', 'Nur Jaman', 'admin', 'keu'),
-('adminspv', 'Jayadi', 'admin', 'spv');
+('adminkeu', 'Bagian Keuangan', 'admin', 'keu'),
+('adminspv', 'Supervisor', 'admin', 'spv');
 
 --
 -- Indexes for dumped tables

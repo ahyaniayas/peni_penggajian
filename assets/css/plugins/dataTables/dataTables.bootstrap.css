@@ -120,11 +120,11 @@ div.dataTables_scrollFoot table {
 
 .table tbody tr.active:hover td,
 .table tbody tr.active:hover th {
-    background-color: #0075b0 !important;
+    background-color: #f7f0f3 !important;
 }
 
 .table tbody tr.active a {
-    color: white;
+    color: #f7f0f3;
 }
 
 .table-striped tbody tr.active:nth-child(odd) td,
@@ -159,7 +159,7 @@ ul.DTTT_dropdown.dropdown-menu li {
 
 ul.DTTT_dropdown.dropdown-menu li:hover a {
     color: white !important;
-    background-color: #0088cc;
+    background-color: #f7f0f3;
 }
 
 div.DTTT_collection_background {

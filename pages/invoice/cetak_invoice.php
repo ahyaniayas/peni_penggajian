@@ -169,8 +169,7 @@ $html = <<<EOD
 <table cellpadding="5">
 	<tr>
 		<td class="bB" style="width: 10%; text-align: center">
-			// <img src="" style="width: 50px"/>
-			LOGO
+			<img src="../../assets/img/logo.jpg" style="width: 40px"/>
 		</td>
 		<td class="bB" style="width: 90%; text-align: center;">
 			PT ESSEI PERBAMA<br>
@@ -242,19 +241,27 @@ $html = <<<EOD
 </table>
 <table cellpadding="10">
 	<tr>
-		<td class="bA" style="font-size: 16pt;text-align: center">
+		<td class="bA" style="font-size: 12pt;text-align: center">
 			<b>Total Invoice : {$total}</b>
+		</td>
+	</tr>
+</table>
+<table cellpadding="">
+	<tr>
+		<td class="" style="font-size: 10pt;text-align: alignleft">
+			Pembayaran Melalui Rek.
+			BCA 8420093111 a/n
+			PT Essei Perbama
 		</td>
 	</tr>
 </table>
 </td>
 </tr>
 </table>
-<table cellpadding="5">
+<table cellpadding="">
 	<tr>
-		<td style="width: 70%"></td>
-		<td style="width: 30%; text-align: center;font-size: 6pt;">
-			ttd. PT ESSEI PERBAMA
+		<td class="" style="font-size: 10pt;text-align: right">
+			DIREKTUR UTAMA
 		</td>
 	</tr>
 </table>

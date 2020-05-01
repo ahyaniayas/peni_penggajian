@@ -113,6 +113,10 @@ case 'entri':
         <?php } ?>
       </select>
     </div>
+	<div class="form-group">
+      <label>Tanggal</label>
+      <input type="text" class="form-control" name="tgl_invoice" placeholder="0000-00-00" required="">
+    </div>
     <div class="form-group">
       <label>Total Gaji</label>
       <input type="number" class="form-control" name="total_gaji" placeholder="Masukkan Total Gaji">
@@ -151,6 +155,7 @@ $row = $koneksi->prepare($sql);
 $row->execute();
 $isi = $row->fetch(PDO::FETCH_OBJ);
 
+$tgl_invoice = $isi->tgl_invoice;
 $total_gaji = $isi->total_gaji;
 $mfee = $isi->mfee;
 $ppn = $isi->mfee*10/100;
@@ -175,6 +180,10 @@ $id_perusahaan = $isi->id_perusahaan;
         <option value="<?= $isiPerusahaan->id_perusahaan ?>" <?= $id_perusahaan==$isiPerusahaan->id_perusahaan? "selected": ""; ?>><?= $isiPerusahaan->nama ?></option>
         <?php } ?>
       </select>
+    </div>
+	<div class="form-group">
+      <label>Tanggal</label>
+      <input type="text" class="form-control" name="tgl_invoice" placeholder="0000-00-00" value="<?= $tgl_invoice ?>" required="">
     </div>
     <div class="form-group">
       <label>Total Gaji</label>
@@ -219,6 +228,7 @@ $nomor = $isi->nomor;
 $tgl_invoice = $isi->tgl_invoice;
 $nama_perusahaan = $isi->nama_perusahaan;
 $total = number_format(($isi->total_gaji + $isi->mfee + ($isi->mfee*10/100)) - ($isi->mfee*2/100));
+$tgl_bayar = $isi-> tgl_bayar;
 $bayar = $isi->bayar;
 ?>
 <h1>Bayar Invoice</h1>
@@ -239,6 +249,10 @@ $bayar = $isi->bayar;
     <div class="form-group">
       <label>Total</label>
       <input type="text" class="form-control" value="<?= $total ?>" readonly="">
+    </div>
+	<div class="form-group">
+      <label>Tanggal Bayar</label>
+      <input type="text" class="form-control" name="tgl_bayar" placeholder="0000-00-00" value="<?= $tgl_bayar ?>" required="">
     </div>
     <div class="form-group">
       <label>Bayar</label>
