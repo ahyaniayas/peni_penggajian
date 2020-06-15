@@ -10,13 +10,14 @@ if($proses=='simpan'){
 
 	$nip=$_POST['nip'];
 	$gaji=$_POST['gaji'];
+	$hari_kerja=$_POST['hari_kerja'];
 	$lembur=$_POST['lembur'];
 	$uang_makan=$_POST['uang_makan'];
 	$transport=$_POST['transport'];
 	$bpjs=$_POST['bpjs'];
 	$pph21=$_POST['pph21'];
 
-	$sql = "INSERT INTO gaji(tgl_gaji, nip, gaji, lembur, uang_makan, transport, bpjs, pph21) values (NOW(), '$nip', '$gaji', '$lembur', '$uang_makan', '$transport', '$bpjs', '$pph21')";
+	$sql = "INSERT INTO gaji(tgl_gaji, nip, gaji, hari_kerja, lembur, uang_makan, transport, bpjs, pph21) values (NOW(), '$nip', '$gaji', '$hari_kerja', '$lembur', '$uang_makan', '$transport', '$bpjs', '$pph21')";
 	$row = $koneksi->prepare($sql);
 	$row->execute();
 	echo "<script>alert('Tambah Berhasil'); location='../index.php?p=gaji&page=entri'</script>";
@@ -26,6 +27,7 @@ if($proses=='simpan'){
 	$id_gaji=$_POST['id_gaji'];
 
 	$gaji=$_POST['gaji'];
+	$hari_kerja=$_POST['hari_kerja'];
 	$lembur=$_POST['lembur'];
 	$uang_makan=$_POST['uang_makan'];
 	$transport=$_POST['transport'];
@@ -34,6 +36,7 @@ if($proses=='simpan'){
 
 	$sql = "UPDATE gaji SET 
 			gaji='$gaji',
+			hari_kerja='$hari_kerja',
 			lembur='$lembur',
 			uang_makan='$uang_makan',
 			transport='$transport',

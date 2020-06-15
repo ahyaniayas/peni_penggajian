@@ -33,6 +33,7 @@ CREATE TABLE `gaji` (
   `tgl_gaji` date NOT NULL,
   `nip` varchar(10) NOT NULL,
   `gaji` double NOT NULL,
+  `hari_kerja` varchar(5) NOT NULL,
   `lembur` double NOT NULL,
   `uang_makan` double NOT NULL,
   `transport` double NOT NULL,
@@ -44,9 +45,9 @@ CREATE TABLE `gaji` (
 -- Dumping data untuk tabel `gaji`
 --
 
-INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `lembur`, `uang_makan`, `transport`, `bpjs`, `pph21`) VALUES
-(24, '2020-04-27', '1501091009', 4500000, 560000, 1500000, 750000, 41000, 200000),
-(25, '2020-04-28', '989767554', 20000000, 150000, 500000, 750000, 45000, 200000);
+INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `hari_kerja`, `lembur`, `uang_makan`, `transport`, `bpjs`, `pph21`) VALUES
+(24, '2020-04-27', '1501091009', 4500000, 20, 560000, 1500000, 750000, 41000, 200000),
+(25, '2020-04-28', '989767554', 20000000, 20, 150000, 500000, 750000, 45000, 200000);
 
 -- --------------------------------------------------------
 

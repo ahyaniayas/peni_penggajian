@@ -127,19 +127,20 @@ $tgl_gaji = date("d-mY", strtotime($isi->tgl_gaji));
 $nama = $isi->nama;
 $nip = $isi->nip;
 $gaji = number_format($isi->gaji);
+$hari_kerja = number_format($isi->hari_kerja);
 $lembur = number_format($isi->lembur);
 $uang_makan = number_format($isi->uang_makan);
 $transport = number_format($isi->transport);
-$bpjs = number_format($isi->bpjs);
+$bpjs = number_format($isi->gaji * 2/100 + $isi->gaji * 1/100 );
 $pph21 = number_format($isi->pph21);
 
 $totalPendapatan = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport);
 $totalPendapatan = number_format($totalPendapatan);
 
-$totalPotongan = ($isi->bpjs + $isi->pph21);
+$totalPotongan = ($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->pph21);
 $totalPotongan = number_format($totalPotongan);
 
-$total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->bpjs + $isi->pph21);
+$total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->pph21);
 $total = number_format($total);
 
 $judul = "slipgaji_".date("dmY", strtotime($isi->tgl_gaji))."_".$nip.".pdf";
@@ -223,14 +224,20 @@ $html = <<<EOD
 	</tr>
 	<tr>
 		<td></td>
-		<td>Lembur</td>
+		<td>Hari Kerja</td>
 		<td>:</td>
-		<td style="text-align: right">{$lembur}</td>
+		<td style="text-align: right">{$hari_kerja}</td>
 		<td></td>
 		<td>PPH 21</td>
 		<td>:</td>
 		<td style="text-align: right">{$pph21}</td>
 		<td></td>
+	</tr>
+	<tr>
+	<td></td>
+		<td>Lembur</td>
+		<td>:</td>
+		<td style="text-align: right">{$lembur}</td>
 	</tr>
 	<tr>
 		<td></td>

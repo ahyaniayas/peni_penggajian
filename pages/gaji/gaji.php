@@ -24,6 +24,7 @@ case 'list':
       <th>Nama</th>
       <?php if($p=="gaji"){ ?>
       <th>Gaji Pokok</th>
+	  <th>Hari Kerja</th>
       <th>Lembur</th>
       <th>Uang Makan</th>
       <th>Transport</th>
@@ -55,15 +56,16 @@ case 'list':
       <td><?= $isi->nama;?></td>
       <?php if($p=="gaji"){ ?>
       <td><?= number_format($isi->gaji);?></td>
+	  <td><?= number_format($isi->hari_kerja);?></td>
       <td><?= number_format($isi->lembur);?></td>
       <td><?= number_format($isi->uang_makan);?></td>
       <td><?= number_format($isi->transport);?></td>
-      <td><?= number_format($isi->bpjs);?></td>
+      <td><?= number_format($isi->gaji * 2/100 + $isi->gaji * 1/100) ;?></td>
       <td><?= number_format($isi->pph21);?></td>
       <?php } ?>
       <td>
         <?php 
-        $total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->bpjs + $isi->pph21);
+        $total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->pph21);
         echo number_format($total);
         ?>
       </td>
@@ -115,6 +117,10 @@ case 'entri':
       <div class="form-group">
         <label>Gaji Pokok</label>
         <input type="number" class="form-control" name="gaji" placeholder="Masukkan Gaji Pokok">
+	  </div>
+      <div class="form-group">
+        <label>Hari Kerja</label>
+        <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja">
       </div>
       <div class="form-group">
         <label>Lembur</label>
@@ -132,7 +138,7 @@ case 'entri':
     <div class="col-lg-4">
       <div class="form-group">
         <label>BPJS</label>
-        <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS">
+        <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS" readonly="">
       </div>
       <div class="form-group">
         <label>PPH 21</label>
@@ -172,6 +178,7 @@ $isi = $row->fetch(PDO::FETCH_OBJ);
 $nama_perusahaan = $isi->nama_perusahaan;
 $nama = $isi->nama;
 $gaji = $isi->gaji;
+$hari_kerja = $isi->hari_kerja;
 $lembur = $isi->lembur;
 $uang_makan = $isi->uang_makan;
 $transport = $isi->transport;
@@ -193,6 +200,10 @@ $pph21 = $isi->pph21;
       <div class="form-group">
         <label>Gaji Pokok</label>
         <input type="number" class="form-control" name="gaji" placeholder="Masukkan Gaji Pokok" value="<?= $gaji ?>">
+      </div>
+	   <div class="form-group">
+        <label>Hari Kerja</label>
+        <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja" value="<?= $hari_kerja ?>">
       </div>
       <div class="form-group">
         <label>Lembur</label>

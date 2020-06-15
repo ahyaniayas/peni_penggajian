@@ -29,7 +29,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">Sistem Penggajian</a>
+                <a class="navbar-brand" href="index.php">PT ESSEI PERBAMA</a>
             </div>
             <!-- /.navbar-header -->
 
