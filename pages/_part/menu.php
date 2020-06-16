@@ -26,7 +26,7 @@ if(!isset($_SESSION['username'])){
                 <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Home</a>
             </li>
 
-            <?php if ($_SESSION['level']=='spv'){?>
+            <?php if ($_SESSION['level']=='spv' || $_SESSION['level']=='super'){?>
             <li>
                 <small style="padding-left: 15px;">Perusahaan</small>
             </li>
@@ -46,7 +46,7 @@ if(!isset($_SESSION['username'])){
                 <a href="?p=cetak_slipgaji"><i class="fa fa-file-o fa-fw"></i> Cetak Slip Gaji</a>
             </li>
 
-            <?php } if ($_SESSION['level']=='keu'){?>
+            <?php } if ($_SESSION['level']=='keu' || $_SESSION['level']=='super'){?>
             <li>
                 <small style="padding-left: 15px;">Invoice</small>
             </li>
@@ -64,6 +64,14 @@ if(!isset($_SESSION['username'])){
             </li>
             <li>
                 <a href="?p=pembayaran"><i class="fa fa-edit fa-fw"></i> Data Pembayaran</a>
+            </li>
+
+            <?php } if ($_SESSION['level']=='super'){?>
+            <li>
+                <small style="padding-left: 15px;">User</small>
+            </li>
+            <li>
+                <a href="?p=user"><i class="fa fa-edit fa-fw"></i> Data User</a>
             </li>
             <?php } ?>
         </ul>

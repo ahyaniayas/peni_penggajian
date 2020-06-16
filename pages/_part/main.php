@@ -16,5 +16,9 @@ if ($page=='home') {
   include 'invoice/invoice.php';
 }else if ($page=='cetak_invoice'){
   include 'invoice/invoice.php';
+}else if ($page=='user'){
+  include 'user/user.php';
+}else if ($page=='ubahpassword'){
+  include 'ubahpassword/ubahpassword.php';
 }
 ?>

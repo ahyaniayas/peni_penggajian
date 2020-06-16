@@ -1,8 +1,8 @@
 <?php
 session_start();
-if($_SESSION['level']!="spv"){
+if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
   echo "<script>location='../index.php'</script>";
-}
+}else{
 
 require_once ("../_part/koneksi.php");
 require_once ("../../assets/TCPDF/tcpdf.php");
@@ -305,3 +305,4 @@ $pdf->Output($judul, 'I');
 //============================================================+
 // END OF FILE
 //============================================================+
+}

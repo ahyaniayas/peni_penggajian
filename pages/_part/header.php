@@ -1,3 +1,8 @@
+<?php
+    $level = $_SESSION['level'];
+    if($level=="keu"){$level="Keuangan";}else if($level=="spv"){$level="Supervisor";}else if($level=="super"){$level="Administrator";}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,7 +40,7 @@
 
             <ul class="nav navbar-top-links navbar-right">
                
-                <span><?= $_SESSION['nama'] ?></span>
+                <span><?= $_SESSION['nama'] ?> (<?= $level ?>)</span>
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -43,7 +48,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li>
-                            <a href="#"><i class="fa fa-gear fa-fw"></i> Ubah Password</a>
+                            <a href="?p=ubahpassword&page=edit"><i class="fa fa-gear fa-fw"></i> Ubah Password</a>
                         </li>
                         <li class="divider"></li>
                         <li>
