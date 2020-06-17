@@ -131,16 +131,16 @@ $hari_kerja = number_format($isi->hari_kerja);
 $lembur = number_format($isi->lembur);
 $uang_makan = number_format($isi->uang_makan);
 $transport = number_format($isi->transport);
-$bpjs = number_format($isi->gaji * 2/100 + $isi->gaji * 1/100 );
+$bpjs = number_format($isi->bpjs);
 $pph21 = number_format($isi->pph21);
 
 $totalPendapatan = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport);
 $totalPendapatan = number_format($totalPendapatan);
 
-$totalPotongan = ($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->pph21);
+$totalPotongan = ($isi->bpjs + $isi->pph21);
 $totalPotongan = number_format($totalPotongan);
 
-$total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->pph21);
+$total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->bpjs + $isi->pph21);
 $total = number_format($total);
 
 $judul = "slipgaji_".date("dmY", strtotime($isi->tgl_gaji))."_".$nip.".pdf";

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 28 Apr 2020 pada 05.56
+-- Waktu pembuatan: 17 Jun 2020 pada 15.55
 -- Versi server: 10.4.11-MariaDB
 -- Versi PHP: 7.3.15
 
@@ -46,8 +46,8 @@ CREATE TABLE `gaji` (
 --
 
 INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `hari_kerja`, `lembur`, `uang_makan`, `transport`, `bpjs`, `pph21`) VALUES
-(24, '2020-04-27', '1501091009', 4500000, 20, 560000, 1500000, 750000, 41000, 200000),
-(25, '2020-04-28', '989767554', 20000000, 20, 150000, 500000, 750000, 45000, 200000);
+(25, '2020-04-28', '989767554', 20000000, '20', 150000, 500000, 750000, 45000, 200000),
+(27, '2020-06-17', '1501091004', 1230000, '100', 230000, 2000000, 2000000, 30000, 50000);
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,8 @@ INSERT INTO `pegawai` (`nip`, `nama`, `nomor_rekening`, `alamat`, `jabatan`, `no
 ('1501091006', 'Ahyani', '1560003606312', 'bekasi barat daya', 'Direktur', '08127778767', 2),
 ('1501091008', 'Huri', '1560003606314', 'Jakarta', 'Kepala Bagian', '089938737766', 2),
 ('1501091009', 'Alexa', '1560003606315', 'Jakarta', 'Operator', '081233564487', 3),
-('989767554', 'Syukur', '1560003606317', 'Bogor', 'Direktur Pelaksana', '081288126654', 4);
+('989767554', 'Syukur', '1560003606317', 'Bogor', 'Direktur Pelaksana', '081288126654', 4),
+('99999888', 'NAMA', '998998', 'ALAMAT NAMA', 'SPV', '0899899876', 4);
 
 -- --------------------------------------------------------
 
@@ -123,7 +124,7 @@ CREATE TABLE `perusahaan` (
 
 INSERT INTO `perusahaan` (`id_perusahaan`, `nama`, `alamat`) VALUES
 (2, 'PT DAYA APA ADANYA', 'Jalan Raya Bekasi Timur No. 12'),
-(3, 'PT MAJU TERUS', 'Jl Inspeksi Kali Senang No. 45'),
+(3, 'PT MAJU TERUS LAH', 'Jl Inspeksi Kali Senang No. 46'),
 (4, 'PT RUANG GURU', 'Jl Raya Jakarta Bogor KM 33');
 
 -- --------------------------------------------------------
@@ -136,16 +137,18 @@ CREATE TABLE `user` (
   `username` varchar(20) NOT NULL,
   `nama` varchar(200) NOT NULL,
   `password` varchar(20) NOT NULL,
-  `level` varchar(20) NOT NULL
+  `level` enum('spv','keu','super','') NOT NULL,
+  `id_perusahaan` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`username`, `nama`, `password`, `level`) VALUES
-('adminkeu', 'Bagian Keuangan', 'admin', 'keu'),
-('adminspv', 'Supervisor', 'admin', 'spv');
+INSERT INTO `user` (`username`, `nama`, `password`, `level`, `id_perusahaan`) VALUES
+('adminkeu', 'Bagian Keuangan', 'admin', 'keu', NULL),
+('adminspv', 'Supervisor', 'admin', 'spv', 3),
+('adminsuper', 'AHYANI', 'admin', 'super', NULL);
 
 --
 -- Indexes for dumped tables
@@ -191,7 +194,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT untuk tabel `gaji`
 --
 ALTER TABLE `gaji`
-  MODIFY `id_gaji` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_gaji` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT untuk tabel `invoice`

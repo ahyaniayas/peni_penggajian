@@ -24,7 +24,8 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
     </thead>
     <tbody>
   	<?php
-  		$sql = "SELECT * FROM perusahaan";
+      $where = $_SESSION['level']=="spv"? "WHERE id_perusahaan='".$_SESSION['id_perusahaan']."'": "";
+  		$sql = "SELECT * FROM perusahaan $where";
       $row = $koneksi->prepare($sql);
       $row->execute();
       $hasil = $row->fetchAll(PDO::FETCH_OBJ);

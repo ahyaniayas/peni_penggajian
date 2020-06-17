@@ -38,9 +38,10 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
     </thead>
     <tbody>
     <?php
+      $where = $_SESSION['level']=="spv"? "WHERE b.id_perusahaan='".$_SESSION['id_perusahaan']."'": "";
       $sql = "SELECT a.*, b.nama, c.nama nama_perusahaan FROM gaji a 
               JOIN pegawai b ON a.nip=b.nip
-              JOIN perusahaan c ON b.id_perusahaan=c.id_perusahaan";
+              JOIN perusahaan c ON b.id_perusahaan=c.id_perusahaan $where";
       $row = $koneksi->prepare($sql);
       $row->execute();
       $hasil = $row->fetchAll(PDO::FETCH_OBJ);
@@ -61,12 +62,12 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         <td><?= number_format($isi->lembur);?></td>
         <td><?= number_format($isi->uang_makan);?></td>
         <td><?= number_format($isi->transport);?></td>
-        <td><?= number_format($isi->gaji * 2/100 + $isi->gaji * 1/100) ;?></td>
+        <td><?= number_format($isi->bpjs) ;?></td>
         <td><?= number_format($isi->pph21);?></td>
         <?php } ?>
         <td>
           <?php 
-          $total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->pph21);
+          $total = ($isi->gaji + $isi->lembur + $isi->uang_makan + $isi->transport) - ($isi->bpjs + $isi->pph21);
           echo number_format($total);
           ?>
         </td>
@@ -98,7 +99,8 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
           <select class="form-control" name="id_perusahaan" required="" onclick="getPegawai(this.value)">
             <option value="">--- Pilih Perusahaan ---</option>
             <?php
-              $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+              $where = $_SESSION['level']=="spv"? "WHERE id_perusahaan='".$_SESSION['id_perusahaan']."'": "";
+              $sqlPerusahaan = "SELECT * FROM perusahaan $where ORDER BY nama ASC";
               $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
               $rowPerusahaan->execute();
               $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
@@ -121,7 +123,7 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
   	  </div>
         <div class="form-group">
           <label>Hari Kerja</label>
-          <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja">
+          <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja" onkeyup="getUangMakan(this.value)">
         </div>
         <div class="form-group">
           <label>Lembur</label>
@@ -129,17 +131,17 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         </div>
         <div class="form-group">
           <label>Uang Makan</label>
-          <input type="number" class="form-control" name="uang_makan" placeholder="Masukkan Uang Makan">
+          <input type="number" class="form-control" name="uang_makan" id="uang_makan" placeholder="Masukkan Uang Makan" readonly="">
         </div>
         <div class="form-group">
           <label>Transport</label>
-          <input type="number" class="form-control" name="transport" placeholder="Masukkan Transport">
+          <input type="number" class="form-control" name="transport" id="transport" placeholder="Masukkan Transport" readonly="">
         </div>
       </div>
       <div class="col-lg-4">
         <div class="form-group">
           <label>BPJS</label>
-          <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS" readonly="">
+          <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS">
         </div>
         <div class="form-group">
           <label>PPH 21</label>
@@ -204,7 +206,7 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         </div>
   	   <div class="form-group">
           <label>Hari Kerja</label>
-          <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja" value="<?= $hari_kerja ?>">
+          <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja" onkeyup="getUangMakan(this.value)" value="<?= $hari_kerja ?>">
         </div>
         <div class="form-group">
           <label>Lembur</label>
@@ -212,11 +214,11 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         </div>
         <div class="form-group">
           <label>Uang Makan</label>
-          <input type="number" class="form-control" name="uang_makan" placeholder="Masukkan Uang Makan" value="<?= $uang_makan ?>">
+          <input type="number" class="form-control" name="uang_makan" id="uang_makan" placeholder="Masukkan Uang Makan" readonly="" value="<?= $uang_makan ?>">
         </div>
         <div class="form-group">
           <label>Transport</label>
-          <input type="number" class="form-control" name="transport" placeholder="Masukkan Transport" value="<?= $transport ?>">
+          <input type="number" class="form-control" name="transport" id="transport" placeholder="Masukkan Transport" readonly="" value="<?= $transport ?>">
         </div>
       </div>
       <div class="col-lg-4">
@@ -257,6 +259,11 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         if(statusTxt == "error");
           // alert("Error: " + xhr.status + ": " + xhr.statusText);
       });
+    }
+
+    function getUangMakan(val){
+      $("#uang_makan").val(parseInt(val)*20000);
+      $("#transport").val(parseInt(val)*20000);
     }
   </script>
 <?php } ?>

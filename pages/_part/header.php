@@ -40,7 +40,7 @@
 
             <ul class="nav navbar-top-links navbar-right">
                
-                <span><?= $_SESSION['nama'] ?> (<?= $level ?>)</span>
+                <span><?= $_SESSION['nama'] ?> (<?= $level ?> <?= $level=="Supervisor"? $_SESSION['nama_perusahaan']: ""; ?>)</span>
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">

@@ -1,0 +1,4 @@
+ALTER TABLE `user` ADD `id_perusahaan` INT NULL AFTER `level`;
+ALTER TABLE `user` CHANGE `level` `level` ENUM('spv','keu','super','') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+TRUNCATE `user`;
+INSERT INTO `user` (`username`, `nama`, `password`, `level`, `id_perusahaan`) VALUES ('adminsuper', 'AHYANI', 'admin', 'super', NULL);

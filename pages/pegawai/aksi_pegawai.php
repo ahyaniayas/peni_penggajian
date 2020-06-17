@@ -10,7 +10,7 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
 
 		$nip=$_POST['nip'];
 		$nama=$_POST['nama'];
-		$nama=$_POST['nomor_rekening'];
+		$nomor_rekening=$_POST['nomor_rekening'];
 		$alamat=$_POST['alamat'];
 		$jabatan=$_POST['jabatan'];
 		$nohp=$_POST['nohp'];

@@ -29,7 +29,8 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
     </thead>
     <tbody>
   	<?php
-  		$sql = "SELECT a.*, b.nama nama_perusahaan FROM pegawai a JOIN perusahaan b ON a.id_perusahaan=b.id_perusahaan";
+      $where = $_SESSION['level']=="spv"? "WHERE a.id_perusahaan='".$_SESSION['id_perusahaan']."'": "";
+  		$sql = "SELECT a.*, b.nama nama_perusahaan FROM pegawai a JOIN perusahaan b ON a.id_perusahaan=b.id_perusahaan $where";
       $row = $koneksi->prepare($sql);
       $row->execute();
       $hasil = $row->fetchAll(PDO::FETCH_OBJ);
@@ -66,7 +67,8 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         <select class="form-control" name="id_perusahaan" required="">
           <option value="">--- Pilih Perusahaan ---</option>
           <?php
-            $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+            $where = $_SESSION['level']=="spv"? "WHERE id_perusahaan='".$_SESSION['id_perusahaan']."'": "";
+            $sqlPerusahaan = "SELECT * FROM perusahaan $where ORDER BY nama ASC";
             $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
             $rowPerusahaan->execute();
             $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
@@ -122,6 +124,7 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
   $isi = $row->fetch(PDO::FETCH_OBJ);
 
   $nama = $isi->nama;
+  $nomor_rekening = $isi->nomor_rekening;
   $alamat = $isi->alamat;
   $jabatan = $isi->jabatan;
   $nohp = $isi->nohp;
@@ -135,7 +138,8 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         <select class="form-control" name="id_perusahaan" disabled="">
           <option value="">--- Pilih Perusahaan ---</option>
           <?php
-            $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama ASC";
+            $where = $_SESSION['level']=="spv"? "WHERE id_perusahaan='".$_SESSION['id_perusahaan']."'": "";
+            $sqlPerusahaan = "SELECT * FROM perusahaan $where ORDER BY nama ASC";
             $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
             $rowPerusahaan->execute();
             $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);

@@ -26,13 +26,15 @@ if($_SESSION['level']!="super"){
     </thead>
     <tbody>
   	<?php
-  		$sql = "SELECT * FROM user WHERE level!='super'";
+  		$sql = "SELECT user.*, perusahaan.nama nama_perusahaan FROM user 
+              LEFT JOIN perusahaan on user.id_perusahaan=perusahaan.id_perusahaan
+              WHERE level!='super'";
       $row = $koneksi->prepare($sql);
       $row->execute();
       $hasil = $row->fetchAll(PDO::FETCH_OBJ);
   		
   		foreach($hasil as $isi){
-        if($isi->level=="keu"){$level="Keuangan";}else if($isi->level=="spv"){$level="Supervisor";}
+        if($isi->level=="keu"){$level="Keuangan";}else if($isi->level=="spv"){$level="Supervisor ".$isi->nama_perusahaan;}
   	?>
       <tr>
         <td><?= $isi->username;?></td>
@@ -70,10 +72,26 @@ if($_SESSION['level']!="super"){
       </div>
       <div class="form-group">
         <label>Akses</label>
-        <select class="form-control" name="level">
+        <select class="form-control" name="level" id="level" onchange="getPerusahaan(this.value)">
           <option value="">--- Pilih Akses ---</option>
           <option value="keu">Keuangan</option>
           <option value="spv">Supervisor</option>
+        </select>
+      </div>
+      <div class="form-group" id="form-group-id-perusahaan" style="display: none">
+        <label>Perusahaan</label>
+        <select class="form-control" name="id_perusahaan">
+          <option value="">--- Pilih Perusahaan ---</option>
+          <?php
+            $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama";
+            $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
+            $rowPerusahaan->execute();
+            $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
+            
+            foreach($hasilPerusahaan as $isiPerusahaan){
+          ?>
+          <option value="<?= $isiPerusahaan->id_perusahaan ?>"><?= $isiPerusahaan->nama ?></option>
+          <?php } ?>
         </select>
       </div>
       <div class="form-group">
@@ -100,6 +118,7 @@ if($_SESSION['level']!="super"){
   $nama = $isi->nama;
   $password = $isi->password;
   $level = $isi->level;
+  $id_perusahaan = $isi->id_perusahaan;
   ?>
   <h1>Edit User</h1>
   <form id="form1" name="form1" method="post" action="user/aksi_user.php">
@@ -118,10 +137,26 @@ if($_SESSION['level']!="super"){
       </div>
       <div class="form-group">
         <label>Akses</label>
-        <select class="form-control" name="level">
+        <select class="form-control" name="level" id="level" onchange="getPerusahaan(this.value)">
           <option value="">--- Pilih Akses ---</option>
           <option value="keu" <?= $level=="keu"? "selected": "" ?>>Keuangan</option>
           <option value="spv" <?= $level=="spv"? "selected": "" ?>>Supervisor</option>
+        </select>
+      </div>
+      <div class="form-group" id="form-group-id-perusahaan" style="<?= $level=="spv"? 'display: block': 'display: none'; ?>">
+        <label>Perusahaan</label>
+        <select class="form-control" name="id_perusahaan">
+          <option value="">--- Pilih Perusahaan ---</option>
+          <?php
+            $sqlPerusahaan = "SELECT * FROM perusahaan ORDER BY nama";
+            $rowPerusahaan = $koneksi->prepare($sqlPerusahaan);
+            $rowPerusahaan->execute();
+            $hasilPerusahaan = $rowPerusahaan->fetchAll(PDO::FETCH_OBJ);
+            
+            foreach($hasilPerusahaan as $isiPerusahaan){
+          ?>
+          <option value="<?= $isiPerusahaan->id_perusahaan ?>" <?= $id_perusahaan==$isiPerusahaan->id_perusahaan? "selected": "" ?> ><?= $isiPerusahaan->nama ?></option>
+          <?php } ?>
         </select>
       </div>
       <div class="form-group">
@@ -140,3 +175,12 @@ if($_SESSION['level']!="super"){
   }
   ?>
 <?php } ?>
+<script>
+  function getPerusahaan(val){
+    if(val=="spv"){
+      $("#form-group-id-perusahaan").show();
+    }else{
+      $("#form-group-id-perusahaan").hide();
+    }
+  }
+</script>

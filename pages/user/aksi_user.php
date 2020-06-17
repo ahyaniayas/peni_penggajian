@@ -12,6 +12,7 @@ if($_SESSION['level']!="super"){
 		$nama=$_POST['nama'];
 		$password=$_POST['password'];
 		$level=$_POST['level'];
+		$id_perusahaan=$_POST['id_perusahaan'];
 
 		$sqlCek = "SELECT username FROM user WHERE username='$username'";
 		$rowCek = $koneksi->prepare($sqlCek);
@@ -19,7 +20,7 @@ if($_SESSION['level']!="super"){
 		$jmlCek = $rowCek->rowCount();
 
 		if($jmlCek<=0){
-			$sql = "INSERT INTO user(username, nama, password, level) values ('$username', '$nama', '$password', '$level')";
+			$sql = "INSERT INTO user(username, nama, password, level, id_perusahaan) values ('$username', '$nama', '$password', '$level', '$id_perusahaan')";
 			$row = $koneksi->prepare($sql);
 			$row->execute();
 			echo "<script>alert('Tambah Berhasil'); location='../index.php?p=user&page=entri'</script>";
@@ -32,11 +33,13 @@ if($_SESSION['level']!="super"){
 		$nama=$_POST['nama'];
 		$password=$_POST['password'];
 		$level=$_POST['level'];
+		$id_perusahaan=$_POST['id_perusahaan'];
 
 		$sql = "UPDATE user SET 
 				nama='$nama',
 				password='$password',
-				level='$level'
+				level='$level',
+				id_perusahaan='$id_perusahaan'
 				where username='$username'";
 		$row = $koneksi->prepare($sql);
 		$row->execute();

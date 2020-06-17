@@ -8,7 +8,9 @@ $password=$_POST['password'];
 $data[] = $username;
 $data[] = $password;
 
-$sql = "SELECT * FROM user WHERE username=? and password=?";
+$sql = "SELECT user.*, perusahaan.id_perusahaan, perusahaan.nama nama_perusahaan FROM user
+		LEFT JOIN perusahaan on perusahaan.id_perusahaan=user.id_perusahaan
+		WHERE username=? and password=?";
 $row = $koneksi -> prepare($sql);
 $row -> execute($data);
 
@@ -21,6 +23,10 @@ if($jml > 0){
     $_SESSION['nama']=$isi->nama;
     $_SESSION['password']=$isi->password;
     $_SESSION['level']=$isi->level;
+    if($isi->level=="spv"){
+	    $_SESSION['id_perusahaan']=$isi->id_perusahaan;
+	    $_SESSION['nama_perusahaan']=$isi->nama_perusahaan;
+    }
 
     echo "<script>location='index.php';</script>";
 }else{
