@@ -46,8 +46,11 @@ CREATE TABLE `gaji` (
 --
 
 INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `hari_kerja`, `lembur`, `uang_makan`, `transport`, `bpjs`, `pph21`) VALUES
-(25, '2020-04-28', '989767554', 20000000, '20', 150000, 500000, 750000, 45000, 200000),
-(27, '2020-06-17', '1501091004', 1230000, '100', 230000, 2000000, 2000000, 30000, 50000);
+(25, '2020-06-25', '5500', 4276500, '21', 150000, 500000, 750000, 171060, 0),
+(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0),
+(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0),
+(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0),
+(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0);
 
 -- --------------------------------------------------------
 
@@ -96,15 +99,12 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`nip`, `nama`, `nomor_rekening`, `alamat`, `jabatan`, `nohp`, `id_perusahaan`) VALUES
-('1501091001', 'Tasyaa', '1560003606318', 'Jakarta', 'Manager Keuangan', '081222675643', 2),
-('1501091002', 'Fara', '1560003606319', 'Padang Panjang', 'Programmer', '081288123344', 3),
-('1501091003', 'Rangga', '1560003606310', 'Depok', 'Operator', '089976554388', 3),
-('1501091004', 'Iding', '1560003606311', 'Padang Pendek', 'Operator Jet', '083811436677', 3),
-('1501091006', 'Ahyani', '1560003606312', 'bekasi barat daya', 'Direktur', '08127778767', 2),
-('1501091008', 'Huri', '1560003606314', 'Jakarta', 'Kepala Bagian', '089938737766', 2),
-('1501091009', 'Alexa', '1560003606315', 'Jakarta', 'Operator', '081233564487', 3),
-('989767554', 'Syukur', '1560003606317', 'Bogor', 'Direktur Pelaksana', '081288126654', 4),
-('99999888', 'NAMA', '998998', 'ALAMAT NAMA', 'SPV', '0899899876', 4);
+('1501091001', 'Tasyaa', '1560003606318', 'Jakarta', 'Operator Produksi', '081222675643', 2),
+('1501091002', 'Fara', '1560003606319', 'Padang Panjang', 'Operator Produksi', '081288123344', 3),
+('1501091003', 'Rangga', '1560003606310', 'Depok', 'Operator Produksi', '089976554388', 3),
+('1501091004', 'Iding', '1560003606311', 'Padang Pendek', 'Operator Produksi', '083811436677', 3),
+('1501091006', 'Ahyani', '1560003606312', 'bekasi barat daya', 'Operator Produksi', '08127778767', 2)
+;
 
 -- --------------------------------------------------------
 
@@ -123,9 +123,9 @@ CREATE TABLE `perusahaan` (
 --
 
 INSERT INTO `perusahaan` (`id_perusahaan`, `nama`, `alamat`) VALUES
-(2, 'PT DAYA APA ADANYA', 'Jalan Raya Bekasi Timur No. 12'),
-(3, 'PT MAJU TERUS LAH', 'Jl Inspeksi Kali Senang No. 46'),
-(4, 'PT RUANG GURU', 'Jl Raya Jakarta Bogor KM 33');
+(2, 'PT Astra International', 'Jalan Raya Bekasi Timur No. 12'),
+(3, 'PT Mondelez Indonesia Manufacturing', 'Jl Inspeksi Kali Malang No. 46'),
+(4, 'PT Best Label Indonesia', 'Jl Raya Jakarta Bogor KM 33');
 
 -- --------------------------------------------------------
 
@@ -148,7 +148,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`username`, `nama`, `password`, `level`, `id_perusahaan`) VALUES
 ('adminkeu', 'Bagian Keuangan', 'admin', 'keu', NULL),
 ('adminspv', 'Supervisor', 'admin', 'spv', 3),
-('adminsuper', 'AHYANI', 'admin', 'super', NULL);
+('adminsuper', 'Peni', 'admin', 'super', NULL);
 
 --
 -- Indexes for dumped tables

@@ -1,7 +1,7 @@
 <?php
-$page = isset($_GET['p']) ? $_GET['p'] : 'home';
-if ($page=='home') {
-  include 'home.php';
+$page = isset($_GET['p']) ? $_GET['p'] : 'beranda';
+if ($page=='beranda') {
+  include 'beranda.php';
 }else if ($page=='perusahaan'){
   include 'perusahaan/perusahaan.php';
 }else if ($page=='pegawai'){

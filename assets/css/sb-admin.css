@@ -24,7 +24,7 @@ body {
 #page-wrapper {
     padding: 0 15px;
     min-height: 568px;
-    background-color: #f7f0f3;
+    background-color: #DC143C;
 }
 
 @media(min-width:768px) {
@@ -33,7 +33,7 @@ body {
         margin: 0 0 0 250px;
         padding: 0 30px;
         min-height: 1300px;
-        border-left: 1px solid #f7f0f3;
+        border-left: 1px solid #DC143C;
     }
 }
 
@@ -100,7 +100,7 @@ body {
 /* Sidebar Menu Styles */
 
 .navbar-static-side ul li {
-    border-bottom: 1px solid #f7f0f3;
+    border-bottom: 1px solid #DC143C;
 }
 
 .sidebar-search {
@@ -167,28 +167,28 @@ body {
 
 .btn-outline {
     color: inherit;
-    background-color: #f7f0f3;
+    background-color: #DC143C;
     transition: all .5s;
 }
 
 .btn-primary.btn-outline {
-    color: #f7f0f3;
+    color: #DC143C;
 }
 
 .btn-success.btn-outline {
-    color: #f7f0f3;
+    color: #DC143C;
 }
 
 .btn-info.btn-outline {
-    color: #f7f0f3;
+    color: #DC143C;
 }
 
 .btn-warning.btn-outline {
-    color: #f7f0f3;
+    color: #DC143C;
 }
 
 .btn-danger.btn-outline {
-    color: #f7f0f3;
+    color: #DC143C;
 }
 
 .btn-primary.btn-outline:hover,
@@ -196,7 +196,7 @@ body {
 .btn-info.btn-outline:hover,
 .btn-warning.btn-outline:hover,
 .btn-danger.btn-outline:hover {
-    color: #f7f0f3;
+    color: #DC143C;
 }
 
 /* Pages */
@@ -214,7 +214,7 @@ body {
 .chat li {
     margin-bottom: 10px;
     padding-bottom: 5px;
-    border-bottom: 1px dotted #B3A9A9;
+    border-bottom: 1px dotted #DC143C;
 }
 
 .chat li.left .chat-body {

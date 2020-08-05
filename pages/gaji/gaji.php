@@ -62,7 +62,7 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         <td><?= number_format($isi->lembur);?></td>
         <td><?= number_format($isi->uang_makan);?></td>
         <td><?= number_format($isi->transport);?></td>
-        <td><?= number_format($isi->bpjs) ;?></td>
+        <td><?= number_format($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->gaji * 1/100) ;?></td>
         <td><?= number_format($isi->pph21);?></td>
         <?php } ?>
         <td>
@@ -141,7 +141,7 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
       <div class="col-lg-4">
         <div class="form-group">
           <label>BPJS</label>
-          <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS">
+          <input type="number" class="form-control" name="bpjs" id="bpjs" placeholder="Masukkan BPJS" readonly="">
         </div>
         <div class="form-group">
           <label>PPH 21</label>
