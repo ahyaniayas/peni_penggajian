@@ -4,6 +4,8 @@ if ($page=='beranda') {
   include 'beranda.php';
 }else if ($page=='perusahaan'){
   include 'perusahaan/perusahaan.php';
+}else if ($page=='artikel'){
+  include 'artikel/artikel.php';
 }else if ($page=='pegawai'){
   include 'pegawai/pegawai.php';
 }else if ($page=='gaji'){

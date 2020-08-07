@@ -23,7 +23,11 @@ if(!isset($_SESSION['username'])){
             </li>
 
             <li>
-                <a href="index.php"><i class="fa fa-dashboard fa-fw"></i>Beranda</a>
+                <a href="?p=beranda"><i class="fa fa-dashboard fa-fw"></i>Beranda</a>
+            </li>
+
+            <li>
+                <a href="?p=artikel"><i class="fa fa-file-text fa-fw"></i>Artikel</a>
             </li>
 
             <?php if ($_SESSION['level']=='spv' || $_SESSION['level']=='super'){?>
