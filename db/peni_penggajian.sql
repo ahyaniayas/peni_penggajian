@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 17 Jun 2020 pada 15.55
--- Versi server: 10.4.11-MariaDB
--- Versi PHP: 7.3.15
+-- Generation Time: Aug 07, 2020 at 04:39 AM
+-- Server version: 10.4.13-MariaDB
+-- PHP Version: 7.3.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `gaji`
+-- Table structure for table `gaji`
 --
 
 CREATE TABLE `gaji` (
@@ -42,20 +41,16 @@ CREATE TABLE `gaji` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `gaji`
+-- Dumping data for table `gaji`
 --
 
 INSERT INTO `gaji` (`id_gaji`, `tgl_gaji`, `nip`, `gaji`, `hari_kerja`, `lembur`, `uang_makan`, `transport`, `bpjs`, `pph21`) VALUES
-(25, '2020-06-25', '5500', 4276500, '21', 150000, 500000, 750000, 171060, 0),
-(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0),
-(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0),
-(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0),
-(27, '2020-06-25', '5501', 4276500, '21', 230000, 2000000, 2000000, 171060, 0);
+(1, '2020-08-07', '1501091001', 2500000, '20', 500000, 400000, 400000, 20000, 10000);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `invoice`
+-- Table structure for table `invoice`
 --
 
 CREATE TABLE `invoice` (
@@ -70,10 +65,11 @@ CREATE TABLE `invoice` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `invoice`
+-- Dumping data for table `invoice`
 --
 
 INSERT INTO `invoice` (`id_invoice`, `tgl_invoice`, `nomor`, `total_gaji`, `mfee`, `bayar`, `tgl_bayar`, `id_perusahaan`) VALUES
+(1, '2020-08-07', 'INV-207082020090357', 25000000, 2500000, 27000000, '0000-00-00', 2),
 (2, '2020-03-31', 'INV-228042020025314', 15000000, 5500000, 20940000, '2020-04-28', 2),
 (3, '2020-04-28', 'INV-228042020075443', 25000000, 5500000, 0, '0000-00-00', 2),
 (4, '2020-01-29', 'INV-328042020102647', 55000000, 6500000, 0, '0000-00-00', 3);
@@ -81,7 +77,7 @@ INSERT INTO `invoice` (`id_invoice`, `tgl_invoice`, `nomor`, `total_gaji`, `mfee
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pegawai`
+-- Table structure for table `pegawai`
 --
 
 CREATE TABLE `pegawai` (
@@ -95,7 +91,7 @@ CREATE TABLE `pegawai` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `pegawai`
+-- Dumping data for table `pegawai`
 --
 
 INSERT INTO `pegawai` (`nip`, `nama`, `nomor_rekening`, `alamat`, `jabatan`, `nohp`, `id_perusahaan`) VALUES
@@ -103,13 +99,12 @@ INSERT INTO `pegawai` (`nip`, `nama`, `nomor_rekening`, `alamat`, `jabatan`, `no
 ('1501091002', 'Fara', '1560003606319', 'Padang Panjang', 'Operator Produksi', '081288123344', 3),
 ('1501091003', 'Rangga', '1560003606310', 'Depok', 'Operator Produksi', '089976554388', 3),
 ('1501091004', 'Iding', '1560003606311', 'Padang Pendek', 'Operator Produksi', '083811436677', 3),
-('1501091006', 'Ahyani', '1560003606312', 'bekasi barat daya', 'Operator Produksi', '08127778767', 2)
-;
+('1501091006', 'Ahyani', '1560003606312', 'bekasi barat daya', 'Operator Produksi', '08127778767', 2);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `perusahaan`
+-- Table structure for table `perusahaan`
 --
 
 CREATE TABLE `perusahaan` (
@@ -119,7 +114,7 @@ CREATE TABLE `perusahaan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `perusahaan`
+-- Dumping data for table `perusahaan`
 --
 
 INSERT INTO `perusahaan` (`id_perusahaan`, `nama`, `alamat`) VALUES
@@ -130,7 +125,7 @@ INSERT INTO `perusahaan` (`id_perusahaan`, `nama`, `alamat`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -142,7 +137,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`username`, `nama`, `password`, `level`, `id_perusahaan`) VALUES
@@ -155,74 +150,56 @@ INSERT INTO `user` (`username`, `nama`, `password`, `level`, `id_perusahaan`) VA
 --
 
 --
--- Indeks untuk tabel `gaji`
+-- Indexes for table `gaji`
 --
 ALTER TABLE `gaji`
-  ADD PRIMARY KEY (`id_gaji`),
-  ADD KEY `nip` (`nip`);
+  ADD PRIMARY KEY (`id_gaji`);
 
 --
--- Indeks untuk tabel `invoice`
+-- Indexes for table `invoice`
 --
 ALTER TABLE `invoice`
   ADD PRIMARY KEY (`id_invoice`);
 
 --
--- Indeks untuk tabel `pegawai`
+-- Indexes for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  ADD PRIMARY KEY (`nip`),
-  ADD KEY `id_perusahaan` (`id_perusahaan`);
+  ADD PRIMARY KEY (`nip`);
 
 --
--- Indeks untuk tabel `perusahaan`
+-- Indexes for table `perusahaan`
 --
 ALTER TABLE `perusahaan`
   ADD PRIMARY KEY (`id_perusahaan`);
 
 --
--- Indeks untuk tabel `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`username`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `gaji`
+-- AUTO_INCREMENT for table `gaji`
 --
 ALTER TABLE `gaji`
-  MODIFY `id_gaji` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_gaji` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `invoice`
+-- AUTO_INCREMENT for table `invoice`
 --
 ALTER TABLE `invoice`
   MODIFY `id_invoice` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `perusahaan`
+-- AUTO_INCREMENT for table `perusahaan`
 --
 ALTER TABLE `perusahaan`
-  MODIFY `id_perusahaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `gaji`
---
-ALTER TABLE `gaji`
-  ADD CONSTRAINT `gaji_ibfk_1` FOREIGN KEY (`nip`) REFERENCES `pegawai` (`nip`);
-
---
--- Ketidakleluasaan untuk tabel `pegawai`
---
-ALTER TABLE `pegawai`
-  ADD CONSTRAINT `pegawai_ibfk_1` FOREIGN KEY (`id_perusahaan`) REFERENCES `perusahaan` (`id_perusahaan`);
+  MODIFY `id_perusahaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
