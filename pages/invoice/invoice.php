@@ -119,19 +119,19 @@ if($_SESSION['level']!="keu" && $_SESSION['level']!="super"){
       </div>
       <div class="form-group">
         <label>Total Gaji</label>
-        <input type="number" class="form-control" name="total_gaji" placeholder="Masukkan Total Gaji">
+        <input type="text" class="form-control number" name="total_gaji" placeholder="Masukkan Total Gaji" onkeyup="setData(this.value)">
       </div>
       <div class="form-group">
         <label>Management Fee</label>
-        <input type="number" class="form-control" name="mfee" placeholder="Masukkan Management Fee" onkeyup="setData(this.value)">
+        <input type="text" class="form-control number" name="mfee" id="mfee" placeholder="Masukkan Management Fee" readonly="">
       </div>
       <div class="form-group">
         <label>PPN</label>
-        <input type="number" class="form-control" id="ppn" placeholder="Masukkan PPN" readonly="">
+        <input type="text" class="form-control number" id="ppn" placeholder="Masukkan PPN" readonly="">
       </div>
       <div class="form-group">
         <label>PPH 23</label>
-        <input type="number" class="form-control" id="pph23" placeholder="Masukkan PPH 23" readonly="">
+        <input type="text" class="form-control number" id="pph23" placeholder="Masukkan PPH 23" readonly="">
       </div>
       <div class="form-group">
         <button name="proses" type="submit" value="simpan" class="btn btn-primary">
@@ -187,19 +187,19 @@ if($_SESSION['level']!="keu" && $_SESSION['level']!="super"){
       </div>
       <div class="form-group">
         <label>Total Gaji</label>
-        <input type="number" class="form-control" name="total_gaji" placeholder="Masukkan Total Gaji" value="<?= $total_gaji ?>">
+        <input type="text" class="form-control number" name="total_gaji" placeholder="Masukkan Total Gaji" value="<?= number_format($total_gaji) ?>" onkeyup="setData(this.value)">
       </div>
       <div class="form-group">
         <label>Management Fee</label>
-        <input type="number" class="form-control" name="mfee" placeholder="Masukkan Management Fee" value="<?= $mfee ?>" onkeyup="setData(this.value)">
+        <input type="text" class="form-control number" name="mfee" id="mfee" placeholder="Masukkan Management Fee" value="<?= number_format($mfee) ?>" readonly="">
       </div>
       <div class="form-group">
         <label>PPN</label>
-        <input type="number" class="form-control" id="ppn" placeholder="Masukkan PPN" value="<?= $ppn ?>" readonly="">
+        <input type="text" class="form-control number" id="ppn" placeholder="Masukkan PPN" value="<?= number_format($ppn) ?>" readonly="">
       </div>
       <div class="form-group">
         <label>PPH 23</label>
-        <input type="number" class="form-control" id="pph23" placeholder="Masukkan PPH 23" value="<?= $pph23 ?>" readonly="">
+        <input type="text" class="form-control number" id="pph23" placeholder="Masukkan PPH 23" value="<?= number_format($pph23) ?>" readonly="">
       </div>
       <div class="form-group">
         <input type="hidden" name="id_invoice" value="<?= $id_invoice ?>">
@@ -256,7 +256,7 @@ if($_SESSION['level']!="keu" && $_SESSION['level']!="super"){
       </div>
       <div class="form-group">
         <label>Bayar</label>
-        <input type="number" class="form-control" name="bayar" placeholder="Masukkan Jumlah Bayar" value="<?= $bayar ?>" required="">
+        <input type="text" class="form-control number" name="bayar" placeholder="Masukkan Jumlah Bayar" value="<?= number_format($bayar) ?>" required="">
       </div>
       <div class="form-group">
         <input type="hidden" name="id_invoice" value="<?= $id_invoice ?>">
@@ -322,8 +322,13 @@ if($_SESSION['level']!="keu" && $_SESSION['level']!="super"){
 
   <script>
     function setData(val){
-      $("#ppn").val(val * 10 /100);
-      $("#pph23").val(val * 2 /100);
+      var mfee = val.replace(/,/g, "") * 10 /100;
+      var ppn = mfee.toString().replace(/,/g, "") * 10 /100;
+      var pph23 = mfee.toString().replace(/,/g, "") * 2 /100;
+
+      $("#mfee").val(numberWithCommas(mfee.toString().replace(/,/g, "")));
+      $("#ppn").val(numberWithCommas(ppn.toString().replace(/,/g, "")));
+      $("#pph23").val(numberWithCommas(pph23.toString().replace(/,/g, "")));
     }
   </script>
 <?php } ?>

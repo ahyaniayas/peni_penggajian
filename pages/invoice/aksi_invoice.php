@@ -9,8 +9,8 @@ if($_SESSION['level']!="keu" && $_SESSION['level']!="super"){
 	if($proses=='simpan'){
 
 		$tgl_invoice=$_POST['tgl_invoice'];
-		$total_gaji=$_POST['total_gaji'];
-		$mfee=$_POST['mfee'];
+		$total_gaji=str_replace(",", "", $_POST['total_gaji']);
+		$mfee=str_replace(",", "", $_POST['mfee']);
 		$id_perusahaan=$_POST['id_perusahaan'];
 
 		$nomor = "INV-".$id_perusahaan.date("dmYHis");
@@ -23,8 +23,8 @@ if($_SESSION['level']!="keu" && $_SESSION['level']!="super"){
 	}else if($proses=='edit'){
 		$id_invoice=$_POST['id_invoice'];
 		$tgl_invoice=$_POST['tgl_invoice'];
-		$total_gaji=$_POST['total_gaji'];
-		$mfee=$_POST['mfee'];
+		$total_gaji=str_replace(",", "", $_POST['total_gaji']);
+		$mfee=str_replace(",", "", $_POST['mfee']);
 
 		$sql = "UPDATE invoice SET 
 				tgl_invoice='$tgl_invoice',
@@ -37,7 +37,7 @@ if($_SESSION['level']!="keu" && $_SESSION['level']!="super"){
 
 	}else if($proses=='bayar'){
 		$id_invoice=$_POST['id_invoice'];
-		$bayar=$_POST['bayar'];
+		$bayar=str_replace(",", "", $_POST['bayar']);
 		$tgl_bayar=$_POST['tgl_bayar'];
 
 		$sql = "UPDATE invoice SET 

@@ -62,7 +62,7 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         <td><?= number_format($isi->lembur);?></td>
         <td><?= number_format($isi->uang_makan);?></td>
         <td><?= number_format($isi->transport);?></td>
-        <td><?= number_format($isi->gaji * 2/100 + $isi->gaji * 1/100 + $isi->gaji * 1/100) ;?></td>
+        <td><?= number_format($isi->bpjs);?></td>
         <td><?= number_format($isi->pph21);?></td>
         <?php } ?>
         <td>
@@ -119,33 +119,33 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         </div>
         <div class="form-group">
           <label>Gaji Pokok</label>
-          <input type="number" class="form-control" name="gaji" placeholder="Masukkan Gaji Pokok">
+          <input type="text" class="form-control number" name="gaji" placeholder="Masukkan Gaji Pokok">
   	  </div>
         <div class="form-group">
           <label>Hari Kerja</label>
-          <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja" onkeyup="getUangMakan(this.value)">
+          <input type="text" class="form-control number" name="hari_kerja" placeholder="Masukkan Hari Kerja" onkeyup="getUangMakan(this.value)">
         </div>
         <div class="form-group">
           <label>Lembur</label>
-          <input type="number" class="form-control" name="lembur" placeholder="Masukkan Lembur">
+          <input type="text" class="form-control number" name="lembur" placeholder="Masukkan Lembur">
         </div>
         <div class="form-group">
           <label>Uang Makan</label>
-          <input type="number" class="form-control" name="uang_makan" id="uang_makan" placeholder="Masukkan Uang Makan" readonly="">
+          <input type="text" class="form-control number" name="uang_makan" id="uang_makan" placeholder="Masukkan Uang Makan" readonly="">
         </div>
         <div class="form-group">
           <label>Transport</label>
-          <input type="number" class="form-control" name="transport" id="transport" placeholder="Masukkan Transport" readonly="">
+          <input type="text" class="form-control number" name="transport" id="transport" placeholder="Masukkan Transport" readonly="">
         </div>
       </div>
       <div class="col-lg-4">
         <div class="form-group">
           <label>BPJS</label>
-          <input type="number" class="form-control" name="bpjs" id="bpjs" placeholder="Masukkan BPJS" readonly="">
+          <input type="text" class="form-control number" name="bpjs" id="bpjs" placeholder="Masukkan BPJS">
         </div>
         <div class="form-group">
           <label>PPH 21</label>
-          <input type="number" class="form-control" name="pph21" placeholder="Masukkan PPH 21">
+          <input type="text" class="form-control number" name="pph21" placeholder="Masukkan PPH 21">
         </div>
       </div>
     </div>
@@ -202,33 +202,33 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
         </div>
         <div class="form-group">
           <label>Gaji Pokok</label>
-          <input type="number" class="form-control" name="gaji" placeholder="Masukkan Gaji Pokok" value="<?= $gaji ?>">
+          <input type="text" class="form-control number" name="gaji" placeholder="Masukkan Gaji Pokok" value="<?= number_format($gaji) ?>">
         </div>
   	   <div class="form-group">
           <label>Hari Kerja</label>
-          <input type="number" class="form-control" name="hari_kerja" placeholder="Masukkan Hari Kerja" onkeyup="getUangMakan(this.value)" value="<?= $hari_kerja ?>">
+          <input type="text" class="form-control number" name="hari_kerja" placeholder="Masukkan Hari Kerja" onkeyup="getUangMakan(this.value)" value="<?= number_format($hari_kerja) ?>">
         </div>
         <div class="form-group">
           <label>Lembur</label>
-          <input type="number" class="form-control" name="lembur" placeholder="Masukkan Lembur" value="<?= $lembur ?>">
+          <input type="text" class="form-control number" name="lembur" placeholder="Masukkan Lembur" value="<?= number_format($lembur) ?>">
         </div>
         <div class="form-group">
           <label>Uang Makan</label>
-          <input type="number" class="form-control" name="uang_makan" id="uang_makan" placeholder="Masukkan Uang Makan" readonly="" value="<?= $uang_makan ?>">
+          <input type="text" class="form-control number" name="uang_makan" id="uang_makan" placeholder="Masukkan Uang Makan" readonly="" value="<?= number_format($uang_makan) ?>">
         </div>
         <div class="form-group">
           <label>Transport</label>
-          <input type="number" class="form-control" name="transport" id="transport" placeholder="Masukkan Transport" readonly="" value="<?= $transport ?>">
+          <input type="text" class="form-control number" name="transport" id="transport" placeholder="Masukkan Transport" readonly="" value="<?= number_format($transport) ?>">
         </div>
       </div>
       <div class="col-lg-4">
         <div class="form-group">
           <label>BPJS</label>
-          <input type="number" class="form-control" name="bpjs" placeholder="Masukkan BPJS" value="<?= $bpjs ?>">
+          <input type="text" class="form-control number" name="bpjs" placeholder="Masukkan BPJS" value="<?= number_format($bpjs) ?>">
         </div>
         <div class="form-group">
           <label>PPH 21</label>
-          <input type="number" class="form-control" name="pph21" placeholder="Masukkan PPH 21" value="<?= $pph21 ?>">
+          <input type="text" class="form-control number" name="pph21" placeholder="Masukkan PPH 21" value="<?= number_format($pph21) ?>">
         </div>
       </div>
     </div>
@@ -262,8 +262,10 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
     }
 
     function getUangMakan(val){
-      $("#uang_makan").val(parseInt(val)*20000);
-      $("#transport").val(parseInt(val)*20000);
+      var uang_makan = parseInt(val.replace(/,/g, ""))*20000;
+      var transport = parseInt(val.replace(/,/g, ""))*20000;
+      $("#uang_makan").val(numberWithCommas(uang_makan.toString().replace(/,/g, "")));
+      $("#transport").val(numberWithCommas(transport.toString().replace(/,/g, "")));
     }
   </script>
 <?php } ?>

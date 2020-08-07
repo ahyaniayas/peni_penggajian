@@ -9,13 +9,13 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
 	if($proses=='simpan'){
 
 		$nip=$_POST['nip'];
-		$gaji=$_POST['gaji'];
-		$hari_kerja=$_POST['hari_kerja'];
-		$lembur=$_POST['lembur'];
-		$uang_makan=$_POST['uang_makan'];
-		$transport=$_POST['transport'];
-		$bpjs=$_POST['bpjs'];
-		$pph21=$_POST['pph21'];
+		$gaji=str_replace(",", "", $_POST['gaji']);
+		$hari_kerja=str_replace(",", "", $_POST['hari_kerja']);
+		$lembur=str_replace(",", "", $_POST['lembur']);
+		$uang_makan=str_replace(",", "", $_POST['uang_makan']);
+		$transport=str_replace(",", "", $_POST['transport']);
+		$bpjs=str_replace(",", "", $_POST['bpjs']);
+		$pph21=str_replace(",", "", $_POST['pph21']);
 
 		$sql = "INSERT INTO gaji(tgl_gaji, nip, gaji, hari_kerja, lembur, uang_makan, transport, bpjs, pph21) values (NOW(), '$nip', '$gaji', '$hari_kerja', '$lembur', '$uang_makan', '$transport', '$bpjs', '$pph21')";
 		$row = $koneksi->prepare($sql);
@@ -26,13 +26,13 @@ if($_SESSION['level']!="spv" && $_SESSION['level']!="super"){
 
 		$id_gaji=$_POST['id_gaji'];
 
-		$gaji=$_POST['gaji'];
-		$hari_kerja=$_POST['hari_kerja'];
-		$lembur=$_POST['lembur'];
-		$uang_makan=$_POST['uang_makan'];
-		$transport=$_POST['transport'];
-		$bpjs=$_POST['bpjs'];
-		$pph21=$_POST['pph21'];
+		$gaji=str_replace(",", "", $_POST['gaji']);
+		$hari_kerja=str_replace(",", "", $_POST['hari_kerja']);
+		$lembur=str_replace(",", "", $_POST['lembur']);
+		$uang_makan=str_replace(",", "", $_POST['uang_makan']);
+		$transport=str_replace(",", "", $_POST['transport']);
+		$bpjs=str_replace(",", "", $_POST['bpjs']);
+		$pph21=str_replace(",", "", $_POST['pph21']);
 
 		$sql = "UPDATE gaji SET 
 				gaji='$gaji',

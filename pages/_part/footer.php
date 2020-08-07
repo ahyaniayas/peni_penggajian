@@ -15,6 +15,8 @@
 
 		<!-- SB Admin Scripts - Include with every page -->
 		<script src="../assets/js/sb-admin.js"></script>
+		<!-- custom ahyani -->
+		<script src="../assets/js/custom.js"></script>
 
 		<!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
 		<!-- <script src="../assets/js/demo/dashboard-demo.js"></script> -->
